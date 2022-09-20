@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		49B380BC65DE29583E0B1E11 /* Pods-IosAwnCore_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosAwnCore_Tests.release.xcconfig"; path = "Target Support Files/Pods-IosAwnCore_Tests/Pods-IosAwnCore_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		5A26A22CA977EDF2437C4007 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		5A26A22CA977EDF2437C4007 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* IosAwnCore_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IosAwnCore_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,9 +42,9 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7E24529241060A612A5EA323 /* Pods_IosAwnCore_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IosAwnCore_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FB1CFB8B5653650850AE240 /* Pods-IosAwnCore_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosAwnCore_Tests.debug.xcconfig"; path = "Target Support Files/Pods-IosAwnCore_Tests/Pods-IosAwnCore_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		9E5E57FA922B8B39B3D63F31 /* IosAwnCore.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = IosAwnCore.podspec; path = ../IosAwnCore.podspec; sourceTree = "<group>"; };
+		9E5E57FA922B8B39B3D63F31 /* IosAwnCore.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = IosAwnCore.podspec; path = ../IosAwnCore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B1EA66FC8167B3170F3F471C /* Pods-IosAwnCore_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosAwnCore_Example.release.xcconfig"; path = "Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C3A3A9B969E0D0A17297C53C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		C3A3A9B969E0D0A17297C53C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E23C9C3FB6E0383FF8052AEA /* Pods-IosAwnCore_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosAwnCore_Example.debug.xcconfig"; path = "Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E3C82CCD9217785E132A4893 /* Pods_IosAwnCore_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IosAwnCore_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -77,7 +77,6 @@
 				8FB1CFB8B5653650850AE240 /* Pods-IosAwnCore_Tests.debug.xcconfig */,
 				49B380BC65DE29583E0B1E11 /* Pods-IosAwnCore_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -171,7 +170,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				6791000D5BA4B68D173FCEA6 /* [CP] Embed Pods Frameworks */,
+				35AA0A4DDCE9AE964A155BEE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -214,10 +213,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 4R89PK952Q;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 4R89PK952Q;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -228,6 +229,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -285,6 +287,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		35AA0A4DDCE9AE964A155BEE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/IosAwnCore/IosAwnCore.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IosAwnCore.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3ACEA1D58E44DFF2E81F3456 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -305,24 +325,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6791000D5BA4B68D173FCEA6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/IosAwnCore/IosAwnCore.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IosAwnCore.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IosAwnCore_Example/Pods-IosAwnCore_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E9D3458833F4824A70AB9C9A /* [CP] Embed Pods Frameworks */ = {
@@ -438,7 +440,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -484,7 +486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -497,6 +499,7 @@
 			baseConfigurationReference = E23C9C3FB6E0383FF8052AEA /* Pods-IosAwnCore_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 4R89PK952Q;
 				INFOPLIST_FILE = IosAwnCore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -512,6 +515,7 @@
 			baseConfigurationReference = B1EA66FC8167B3170F3F471C /* Pods-IosAwnCore_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 4R89PK952Q;
 				INFOPLIST_FILE = IosAwnCore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -526,6 +530,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8FB1CFB8B5653650850AE240 /* Pods-IosAwnCore_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 4R89PK952Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -548,6 +553,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 49B380BC65DE29583E0B1E11 /* Pods-IosAwnCore_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 4R89PK952Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
