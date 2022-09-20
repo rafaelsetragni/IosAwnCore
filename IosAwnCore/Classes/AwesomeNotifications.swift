@@ -495,8 +495,10 @@ public class AwesomeNotifications:
     
     @objc public func didFinishLaunch(_ application: UIApplication) {
         
+#if ACTION_EXTENSION
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
+#endif
         
         RefreshSchedulesReceiver()
                 .refreshSchedules()
