@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.7.0'
+  s.version          = '0.7.0-alpha.1'
   s.summary          = 'Awesome Notification\'s Ios Core.'
 
 # This description is used to generate tags and improve search results.
