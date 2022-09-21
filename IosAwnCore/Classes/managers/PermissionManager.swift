@@ -625,14 +625,12 @@ public class PermissionManager {
             return false
         }
         
-#if ACTION_EXTENSION
         if UIApplication.shared.canOpenURL(settingsUrl) {
             DispatchQueue.main.async {
                 UIApplication.shared.open(settingsUrl)
             }
             return true
         }
-#endif
         
         return false
     }

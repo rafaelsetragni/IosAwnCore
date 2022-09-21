@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.1.1'
+  s.version          = '0.7.0'
   s.summary          = 'Awesome Notification\'s Ios Core.'
 
 # This description is used to generate tags and improve search results.
@@ -28,11 +28,16 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/rafaelsetragni/IosAwnCore.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  s.static_framework = true
   s.ios.deployment_target = '10.0'
   s.swift_version = '5.0'
 
   s.source_files = 'IosAwnCore/Classes/**/*'
   
+  s.xcconfig = {
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
+    'ENABLE_BITCODE' => 'NO',
+  }
   # s.resource_bundles = {
   #   'IosAwnCore' => ['IosAwnCore/Assets/*.png']
   # }

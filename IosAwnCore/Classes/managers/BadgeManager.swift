@@ -30,9 +30,7 @@ public class BadgeManager {
     public var globalBadgeCounter:Int {
         get {
             if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
-#if ACTION_EXTENSION
                 _badgeAmount = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber)
-#endif
             }
             else{
                 let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
@@ -46,9 +44,7 @@ public class BadgeManager {
             _badgeAmount = NSNumber(value: newValue)
             
             if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
-#if ACTION_EXTENSION
                 UIApplication.shared.applicationIconBadgeNumber = newValue
-#endif
             }
             else{
                 _badgeAmount = NSNumber(value: newValue)

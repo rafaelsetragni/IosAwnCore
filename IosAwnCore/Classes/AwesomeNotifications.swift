@@ -489,16 +489,13 @@ public class AwesomeNotifications:
     
     
     // *****************************  IOS NOTIFICATION CENTER METHODS  **********************************
-#if !ACTION_EXTENSION
     
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
     @objc public func didFinishLaunch(_ application: UIApplication) {
         
-#if ACTION_EXTENSION
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
-#endif
         
         RefreshSchedulesReceiver()
                 .refreshSchedules()
@@ -682,8 +679,6 @@ public class AwesomeNotifications:
         }
         return jsonMap
     }
-    
-#endif
     
     
     // *****************************  NOTIFICATION METHODS  **********************************

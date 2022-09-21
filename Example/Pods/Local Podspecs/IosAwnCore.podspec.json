@@ -1,6 +1,6 @@
 {
   "name": "IosAwnCore",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "summary": "Awesome Notification's Ios Core.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/rafaelsetragni/IosAwnCore",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/rafaelsetragni/IosAwnCore.git",
-    "tag": "0.1.0"
+    "tag": "0.1.1"
   },
   "platforms": {
     "ios": "10.0"
