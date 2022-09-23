@@ -8,17 +8,11 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.7.0-alpha.1'
-  s.summary          = 'Awesome Notification\'s Ios Core.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.version          = '0.7.0-alpha.2'
+  s.summary          = 'Awesome Notifications Ios Core.'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Awesome Notifications Ios Core
                        DESC
 
   s.homepage         = 'https://github.com/rafaelsetragni/IosAwnCore'
@@ -29,20 +23,15 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.static_framework = true
-  s.ios.deployment_target = '10.0'
-  s.swift_version = '5.0'
+  s.ios.deployment_target = '11.0'
+  s.swift_version = '5.3'
 
   s.source_files = 'IosAwnCore/Classes/**/*'
   
   s.xcconfig = {
-    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
     'ENABLE_BITCODE' => 'NO',
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
+    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
   }
-  # s.resource_bundles = {
-  #   'IosAwnCore' => ['IosAwnCore/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  
 end

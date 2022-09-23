@@ -1,6 +1,6 @@
 {
   "name": "IosAwnCore",
-  "version": "0.1.1",
+  "version": "0.7.0-alpha.2",
   "summary": "Awesome Notification's Ios Core.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/rafaelsetragni/IosAwnCore",
@@ -13,12 +13,18 @@
   },
   "source": {
     "git": "https://github.com/rafaelsetragni/IosAwnCore.git",
-    "tag": "0.1.1"
+    "tag": "0.7.0-alpha.2"
   },
+  "static_framework": true,
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0"
   },
-  "swift_versions": "5.0",
+  "swift_versions": "5.3",
   "source_files": "IosAwnCore/Classes/**/*",
-  "swift_version": "5.0"
+  "xcconfig": {
+    "ENABLE_BITCODE": "NO",
+    "APPLICATION_EXTENSION_API_ONLY": "NO",
+    "BUILD_LIBRARY_FOR_DISTRIBUTION": "YES"
+  },
+  "swift_version": "5.3"
 }
