@@ -20,7 +20,7 @@ public class ActionManager {
     }
 
     public static func recoverActions() -> [ActionReceived] {
-        Logger.i(TAG, "action recovered")
+        if recovered { return [] }
         recovered = true
         return Array(actionCache.values)
     }

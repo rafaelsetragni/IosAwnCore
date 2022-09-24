@@ -51,6 +51,10 @@ public class AwesomeNotifications:
         }
         
         activateiOSNotifications()
+        
+        DefaultsManager
+            .shared
+            .setDefaultGroupTest()
     }
     
     static var areDefaultsLoaded = false

@@ -1,5 +1,6 @@
 public enum Definitions {
-    public static let  USER_DEFAULT_TAG = "group.AwesomeNotifications." + Bundle.main.getBundleName()
+    public static let  USER_DEFAULT_TAG = "group.awn." + Bundle.main.getBundleName().md5.prefix(8)
+    public static let  TEST_APP_GROUP = "AAA"
     
     public static let  NOTIFICATION_MODEL_CONTENT = "content"
     public static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"

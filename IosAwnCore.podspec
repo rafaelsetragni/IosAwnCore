@@ -8,11 +8,11 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.7.0-alpha.2'
-  s.summary          = 'Awesome Notifications Ios Core.'
+  s.version          = '0.7.0-alpha.3'
+  s.summary          = 'Awesome Notifications Ios Core'
 
   s.description      = <<-DESC
-Awesome Notifications Ios Core
+Awesome Notifications Ios Core (Only iOS devices).
                        DESC
 
   s.homepage         = 'https://github.com/rafaelsetragni/IosAwnCore'
@@ -21,8 +21,9 @@ Awesome Notifications Ios Core
   s.author           = { 'Rafael Setragni' => '40064496+rafaelsetragni@users.noreply.github.com' }
   s.source           = { :git => 'https://github.com/rafaelsetragni/IosAwnCore.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  
   s.static_framework = true
+  s.platform = :ios
   s.ios.deployment_target = '11.0'
   s.swift_version = '5.3'
 
