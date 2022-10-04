@@ -1,6 +1,6 @@
 {
   "name": "IosAwnCore",
-  "version": "0.7.0+1",
+  "version": "0.7.1",
   "summary": "Awesome Notifications Ios Core",
   "description": "Awesome Notifications Ios Core (Only iOS devices).",
   "homepage": "https://github.com/rafaelsetragni/IosAwnCore",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/rafaelsetragni/IosAwnCore.git",
-    "tag": "0.7.0+1"
+    "tag": "0.7.1"
   },
   "static_framework": true,
   "platforms": {
