@@ -24,7 +24,7 @@ Awesome Notifications Ios Core (Only iOS devices).
   
   s.static_framework = true
   s.platform = :ios
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
   s.swift_version = '5.3'
 
   s.source_files = 'IosAwnCore/Classes/**/*'
