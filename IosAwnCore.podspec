@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.7.0-alpha.3'
+  s.version          = '0.7.0'
   s.summary          = 'Awesome Notifications Ios Core'
 
   s.description      = <<-DESC
@@ -24,15 +24,14 @@ Awesome Notifications Ios Core (Only iOS devices).
   
   s.static_framework = true
   s.platform = :ios
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
   s.swift_version = '5.3'
 
   s.source_files = 'IosAwnCore/Classes/**/*'
   
   s.xcconfig = {
     'ENABLE_BITCODE' => 'NO',
-    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
-    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO'
   }
   
 end

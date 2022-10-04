@@ -66,6 +66,7 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_INITIALIZE = "initialize"
     public static let  CHANNEL_METHOD_REGISTER_PLUGIN_BY_NAME = "registerPluginByName"
     public static let  CHANNEL_METHOD_PUSH_NEXT = "pushNext"
+    public static let  CHANNEL_METHOD_GET_INITIAL_ACTION = "getInitialAction"
     public static let  CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData"
     public static let  CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion"
     public static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"

@@ -491,7 +491,6 @@ public class AwesomeNotifications:
         }
     }
     
-    
     // *****************************  IOS NOTIFICATION CENTER METHODS  **********************************
     
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
@@ -784,6 +783,10 @@ public class AwesomeNotifications:
         return BadgeManager
                     .shared
                     .decrementGlobalBadgeCounter()
+    }
+    
+    public func getInitialAction(removeFromEvents:Bool) -> ActionReceived? {
+        return ActionManager.getInitialAction(removeFromEvents: removeFromEvents)
     }
     
     // *****************************  CANCELATION METHODS  **********************************
