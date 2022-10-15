@@ -35,6 +35,9 @@ public class AwesomeNotifications:
     
     public static var awesomeExtensions:AwesomeNotificationsExtension?
     public static var backgroundClassType:BackgroundExecutor.Type?
+    public static var didFinishLaunch:Bool = false
+    public static var removeFromEvents:Bool = false
+    public static var completionHandlerGetInitialAction:((ActionReceived?) -> Void)? = nil
     
     // ************************** CONSTRUCTOR ***********************************
         
@@ -55,6 +58,10 @@ public class AwesomeNotifications:
         DefaultsManager
             .shared
             .setDefaultGroupTest()
+        
+        BadgeManager
+            .shared
+            .syncBadgeAmount()
     }
     
     static var areDefaultsLoaded = false
@@ -498,11 +505,19 @@ public class AwesomeNotifications:
     @objc public func didFinishLaunch(_ application: UIApplication) {
         
         UNUserNotificationCenter.current().delegate = self
-        UIApplication.shared.registerForRemoteNotifications()
         
         RefreshSchedulesReceiver()
                 .refreshSchedules()
         
+        AwesomeNotifications.didFinishLaunch = true
+        if AwesomeNotifications.completionHandlerGetInitialAction != nil {
+            AwesomeNotifications
+                .completionHandlerGetInitialAction!(
+                    ActionManager.getInitialAction(
+                        removeFromEvents: AwesomeNotifications.removeFromEvents))
+        }
+        
+            
         if AwesomeNotifications.debug {
             Logger.d(TAG, "Awesome Notifications attached for iOS")
         }
@@ -785,8 +800,13 @@ public class AwesomeNotifications:
                     .decrementGlobalBadgeCounter()
     }
     
-    public func getInitialAction(removeFromEvents:Bool) -> ActionReceived? {
-        return ActionManager.getInitialAction(removeFromEvents: removeFromEvents)
+    public func getInitialAction(removeFromEvents:Bool, completionHandler: @escaping (ActionReceived?) -> Void) {
+        if AwesomeNotifications.didFinishLaunch {
+            completionHandler(ActionManager.getInitialAction(removeFromEvents: removeFromEvents))
+            return
+        }
+        AwesomeNotifications.removeFromEvents = removeFromEvents
+        AwesomeNotifications.completionHandlerGetInitialAction = completionHandler
     }
     
     // *****************************  CANCELATION METHODS  **********************************

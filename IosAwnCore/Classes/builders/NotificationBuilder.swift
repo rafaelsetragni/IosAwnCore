@@ -247,6 +247,17 @@ public class NotificationBuilder {
     }
     
     private func setBadgeIndicator(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if notificationModel.content?.badge != nil {
+            let badgeAmount:Int = max(notificationModel.content!.badge!, 0)
+            content.badge = NSNumber(value: badgeAmount)
+            if SwiftUtils.isRunningOnExtension() {
+                BadgeManager
+                    .shared
+                    .setGlobalBadgeCounterInStorage(
+                        newValue: badgeAmount)
+            }
+            return
+        }
         if(channel.channelShowBadge!){
             content.badge = NSNumber(value: BadgeManager.shared.incrementGlobalBadgeCounter())
         }

@@ -149,6 +149,9 @@ public enum Definitions {
     public static let  NOTIFICATION_DISPLAYED_DATE = "displayedDate"
     public static let  NOTIFICATION_ACTION_DATE = "actionDate"
     public static let  NOTIFICATION_DISMISSED_DATE = "dismissedDate"
+    
+    public static let  NOTIFICATION_MODEL_ANDROID = "Android"
+    public static let  NOTIFICATION_MODEL_IOS = "iOS"
 
     public static let  NOTIFICATION_ID = "id"
     public static let  NOTIFICATION_LAYOUT = "notificationLayout"
@@ -211,6 +214,7 @@ public enum Definitions {
     public static let  NOTIFICATION_BIG_PICTURE = "bigPicture"
     public static let  NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = "hideLargeIconOnExpand"
     public static let  NOTIFICATION_PROGRESS = "progress"
+    public static let  NOTIFICATION_BADGE = "badge"
     public static let  NOTIFICATION_ENABLE_LIGHTS = "enableLights"
     public static let  NOTIFICATION_LED_COLOR = "ledColor"
     public static let  NOTIFICATION_LED_ON_MS = "ledOnMs"
@@ -251,7 +255,7 @@ public enum Definitions {
         Definitions.NOTIFICATION_PLAY_SOUND: true,
         Definitions.NOTIFICATION_AUTO_DISMISSIBLE: true,
         Definitions.NOTIFICATION_LOCKED: false,
-        Definitions.NOTIFICATION_TICKER: "ticker",
+        Definitions.NOTIFICATION_TICKER: "",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
         Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,
