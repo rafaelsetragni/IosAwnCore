@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.7.2'
+  s.version          = '0.7.3'
   s.summary          = 'Awesome Notifications iOS Core'
 
   s.description      = <<-DESC
@@ -31,7 +31,8 @@ Awesome Notifications Ios Core (Only iOS devices).
   
   s.xcconfig = {
     'ENABLE_BITCODE' => 'NO',
-    'APPLICATION_EXTENSION_API_ONLY' => 'NO'
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
+    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
   }
   
 end

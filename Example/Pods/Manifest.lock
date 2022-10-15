@@ -4,7 +4,7 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - IosAwnCore (0.7.1)
+  - IosAwnCore (0.7.3)
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  IosAwnCore: fd348a51573643e26a194fe20fc78e4190dcadf6
+  IosAwnCore: 6494e0e174d49f04f513e8a002187be226889a37
 
 PODFILE CHECKSUM: d8cb97071873aa1674a26379bee3d448a3b1908f
 
