@@ -58,15 +58,16 @@ public class NotificationContentModel : AbstractModel {
     public init(){}
     
     func registerCreateEvent(
+        withDisplayedDate createdDate: RealDateTime = RealDateTime.init(
+            fromTimeZone: TimeZone(identifier: "UTC")
+        ),
         inLifeCycle lifeCycle: NotificationLifeCycle,
         fromSource createdSource: NotificationSource
     ) -> Bool {
         if(self.createdDate == nil){
             self.createdSource = createdSource
             self.createdLifeCycle = lifeCycle
-            self.createdDate =
-                    RealDateTime.init(
-                        fromTimeZone: RealDateTime.utcTimeZone)
+            self.createdDate = createdDate
             
             return true
         }
@@ -74,12 +75,13 @@ public class NotificationContentModel : AbstractModel {
     }
     
     public func registerDisplayedEvent(
+        withDisplayedDate displayedDate: RealDateTime = RealDateTime.init(
+            fromTimeZone: TimeZone(identifier: "UTC")
+        ),
         inLifeCycle lifeCycle: NotificationLifeCycle
     ){
         self.displayedLifeCycle = lifeCycle
-        self.displayedDate =
-                RealDateTime.init(
-                    fromTimeZone: TimeZone(identifier: "UTC"))
+        self.displayedDate = displayedDate
     }
     
     public func registerLastDisplayedEvent(

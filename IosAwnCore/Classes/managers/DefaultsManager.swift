@@ -58,16 +58,11 @@ public class DefaultsManager {
     public var lastDisplayedDate:RealDateTime {
         get {
             let dateText:String? = userDefaults.object(forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) as? String
-            
-            Logger.d(TAG, "Awesome Notifications - UTC timezone : \(RealDateTime.utcTimeZone)")
-            Logger.d(TAG, "Awesome Notifications - Local timezone : \(DateUtils.shared.localTimeZone)")
-            
             guard let dateText:String = dateText else {
                 return RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
             }
             
-            Logger.d(TAG, "Awesome Notifications - last displayed date : \(dateText)")
-            
+            Logger.d(TAG, "last displayed date recovered: \(dateText)")
             guard let lastDate:RealDateTime =
                                     RealDateTime.init(
                                         fromDateText: dateText,
@@ -78,12 +73,15 @@ public class DefaultsManager {
             
             return lastDate
         }
-        set { userDefaults.setValue(newValue.description, forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) }
     }
     
     
     public func registerLastDisplayedDate(){
-        self.lastDisplayedDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+        let nowDate = RealDateTime().description
+        userDefaults.setValue(
+            nowDate,
+            forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE)
+        Logger.d(TAG, "last displayed date registered: \(nowDate)")
     }
     
     public func checkIfAppGroupConnected() {

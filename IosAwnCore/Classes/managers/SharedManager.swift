@@ -16,7 +16,7 @@ public class SharedManager {
     
     public init(tag:String){
         self.tag = tag
-        objectList = [:]
+        objectList = _userDefaults!.dictionary(forKey: tag) ?? [:]
     }
     
     private let TAG:String = "SharedManager"
@@ -56,6 +56,20 @@ public class SharedManager {
         refreshObjects()
         objectList.removeAll()
         updateObjects()
+    }
+    
+    public func getAllObjectsStarting(with keyFragment:String) -> [[String:Any?]] {
+        refreshObjects()
+        var returnedList:[[String:Any?]] = []
+        
+        for (key, data) in objectList {
+            if !key.starts(with: keyFragment) { continue }
+            if let dictionary:[String:Any?] = data as? [String:Any?] {
+                returnedList.append( dictionary )
+            }
+        }
+        
+        return returnedList
     }
     
     public func getAllObjects() -> [[String:Any?]] {

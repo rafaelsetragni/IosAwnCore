@@ -167,4 +167,28 @@ public class StatusBarManager {
         
         return false
     }
+    
+    public func isNotificationActiveOnStatusBar(
+        id:Int,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
+        UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
+            let stringId:String = String(id)
+            for notification in notifications {
+                if notification.request.identifier == stringId {
+                    return completionHandler(true)
+                }
+            }
+            return completionHandler(false)
+        }
+    }
+
+    public func getAllActiveNotificationIdsOnStatusBar(
+        whenFinished completionHandler: @escaping ([Int]) -> Void
+    ){
+        UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
+            let notificationIds = notifications.compactMap { Int($0.request.identifier) }
+            completionHandler(notificationIds)
+        }
+    }
 }

@@ -1,10 +1,13 @@
 public enum Definitions {
-    public static let  USER_DEFAULT_TAG = "group.awn." + Bundle.main.getBundleName().md5.prefix(8)
+    public static let  USER_DEFAULT_TAG =
+    Bundle.main.infoDictionary?["AwnAppGroupName"] as? String ?? ("group.awn." + Bundle.main.getBundleName().md5.prefix(8))
+    
     public static let  TEST_APP_GROUP = "AAA"
     
     public static let  NOTIFICATION_MODEL_CONTENT = "content"
     public static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"
     public static let  NOTIFICATION_MODEL_BUTTONS = "actionButtons"
+    public static let  NOTIFICATION_MODEL_LOCALIZATIONS = "localizations"
     
     public static let  MEDIA_VALID_NETWORK = "^https?:\\/\\/"//(www)?(\\.?[a-zA-Z0-9@:%.\\-_\\+~#=]{2,256}\\/?)+(\\?\\S+)$
     public static let  MEDIA_VALID_FILE = "^file:\\/\\/"
@@ -87,6 +90,9 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate"
     public static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
     
+    public static let  CHANNEL_METHOD_SET_LOCALIZATION = "setLocalization"
+    public static let  CHANNEL_METHOD_GET_LOCALIZATION = "getLocalization"
+    
     public static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
     public static let  CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage"
     public static let  CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage"
@@ -119,6 +125,8 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier"
     
     public static let  CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules"
+    public static let  CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE = "isNotificationActive"
+    public static let  CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS = "getAllActiveNotificationIds"
 
     public static let  DEFAULT_ICON = "defaultIcon"
     public static let  BADGE_COUNT = "badgeCount"
@@ -163,7 +171,9 @@ public enum Definitions {
     public static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
     public static let  NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
     public static let  NOTIFICATION_JSON = "notificationJson"
+    public static let  NOTIFICATION_TIMEOUT_AFTER = "timeoutAfter"
     
+    public static let  NOTIFICATION_BUTTON_LABELS = "buttonLabels"
     public static let  NOTIFICATION_ACTION_BUTTONS = "actionButtons"
     public static let  NOTIFICATION_BUTTON_KEY = "key"
     public static let  NOTIFICATION_BUTTON_ICON = "icon"

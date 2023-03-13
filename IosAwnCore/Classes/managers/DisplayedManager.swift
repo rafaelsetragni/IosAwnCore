@@ -7,113 +7,157 @@
 
 import Foundation
 
-public class DisplayedManager {
+public class DisplayedManager : EventManager {
     
-    static let shared:SharedManager = SharedManager(tag: Definitions.SHARED_DISPLAYED)
-    static let pendingShared:SharedManager = SharedManager(tag: Definitions.SHARED_SCHEDULED_DISPLAYED)
+    let storage:SharedManager = SharedManager(tag: Definitions.SHARED_DISPLAYED)
     
-    static var pendingSchedulesDisplayed:[String:[String:Any]] =
-        pendingShared.get(referenceKey: Definitions.SHARED_SCHEDULED_DISPLAYED_REFERENCE) as? [String:[String:Any]] ?? [:]
     
-    public static func removeDisplayed(id:Int) -> Bool {
-        return shared.remove(referenceKey: String(id))
+    // **************************** SINGLETON PATTERN *************************************
+    
+    static var instance:DisplayedManager?
+    public static var shared:DisplayedManager {
+        get {
+            DisplayedManager.instance =
+            DisplayedManager.instance ?? DisplayedManager()
+            return DisplayedManager.instance!
+        }
     }
+    private override init(){}
     
-    public static func saveDisplayed(received:NotificationReceived) {
-        let referenceKey = String(received.id!)
-        let dataMap = received.toMap()
-        
-        shared.set(dataMap, referenceKey:referenceKey)
+    // **************************** SINGLETON PATTERN *************************************
+    
+    
+    public func saveDisplayed(received:NotificationReceived) -> Bool {
+        storage.set(
+            received.toMap(),
+            referenceKey: getKeyByIdAndDate(
+                id: received.id!,
+                referenceDate: received.displayedDate!
+            )
+        )
+        return true
     }
 
-    public static func listDisplayed() -> [NotificationReceived] {
+    public func listDisplayed() -> [NotificationReceived] {
         var returnedList:[NotificationReceived] = []
-        let dataList = shared.getAllObjects()
+        let dataList = storage.getAllObjects()
         
         for data in dataList {
-            let received:NotificationReceived = NotificationReceived(nil).fromMap(arguments: data) as! NotificationReceived
+            let received:NotificationReceived? =
+            NotificationReceived(nil)
+                .fromMap(arguments: data) as? NotificationReceived
+            guard let received = received else { continue }
             returnedList.append(received)
         }
         
         return returnedList
     }
     
-    public static func getDisplayedByKey(id:Int) -> NotificationReceived? {
-        guard let data:[String:Any?] = shared.get(referenceKey: String(id)) else {
+    public func getDisplayedByKey(id:Int) -> [NotificationReceived] {
+        var returnedList:[NotificationReceived] = []
+        let dataList = storage.getAllObjectsStarting(with: getKeyById(id: id))
+        
+        for data in dataList {
+            let received:NotificationReceived? = NotificationReceived(nil)
+                .fromMap(arguments: data) as? NotificationReceived
+            guard let received = received else { continue }
+            if received.id != id { continue }
+            returnedList.append(received)
+        }
+        
+        return returnedList
+    }
+    
+    public func getDisplayedByKeyAndDate(id:Int, displayedDate:RealDateTime) -> NotificationReceived? {
+        guard let data:[String:Any?] = storage.get(
+            referenceKey: getKeyByIdAndDate(
+                id: id,
+                referenceDate: displayedDate
+            )
+        ) else {
           return nil
         }
         return NotificationReceived(nil).fromMap(arguments: data) as? NotificationReceived
     }
     
-    public static func updatePendingList(){
-        pendingShared.set(pendingSchedulesDisplayed, referenceKey: Definitions.SHARED_SCHEDULED_DISPLAYED_REFERENCE)
+    public func clearDisplayed(id:Int, displayedDate:RealDateTime) -> Bool {
+        return storage.remove(
+            referenceKey: getKeyByIdAndDate(
+                id: id,
+                referenceDate: displayedDate
+            )
+        )
     }
     
-    public static func saveScheduledToDisplay(received:NotificationReceived) {
-        let referenceKey = String(received.id!)
-        if received.displayedDate == nil {
-            received.registerDisplayedEvent(inLifeCycle: LifeCycleManager.shared.currentLifeCycle)
-        }
+    public func reloadLostSchedulesDisplayed(
+        schedules:[NotificationModel],
+        lastDisplayedDate startingDate:RealDateTime,
+        untilDate limitDate:RealDateTime
+    ){
+        let lastLifeCycle:NotificationLifeCycle =
+                LifeCycleManager
+                    .shared
+                    .hasGoneForeground
+                        ? .Background
+                        : .AppKilled
         
-        let epoch:String = received.displayedDate!.date.secondsSince1970.description
-        let dataMap = received.toMap()
-        
-        if(pendingSchedulesDisplayed[epoch] == nil){
-            pendingSchedulesDisplayed[epoch] = [:]
-        }
-        
-        pendingSchedulesDisplayed[epoch]![referenceKey] = dataMap
-        updatePendingList()
-    }
-    
-    public static func removeScheduledToDisplay(id:Int) -> Bool {
-        let referenceKey:String = String(id)
-        var removed = false
-        
-        for (epoch, alreadyDisplayed) in pendingSchedulesDisplayed {
-            var listToRemove:[String] = []
+        for notificationScheduled in schedules {
+            guard let schedule:NotificationScheduleModel = notificationScheduled.schedule
+            else { continue }
             
-            for (pendingReferenceKey, _) in alreadyDisplayed {
-                if pendingReferenceKey == referenceKey {
-                    listToRemove.append(pendingReferenceKey)
-                }
-            }
+            let displayedDates:[RealDateTime] = getNextValidDates(
+                fromScheduleModel: schedule,
+                startingfromDate: startingDate,
+                untilDate: limitDate)
             
-            for (pendingReferenceKey) in listToRemove {
-                removed = true
-                pendingSchedulesDisplayed[epoch]?.removeValue(forKey: pendingReferenceKey)
+            for displayedDate in displayedDates {
+                let receivedNotification = NotificationReceived(notificationScheduled.content)
+                receivedNotification.registerDisplayedEvent(
+                    withDisplayedDate: displayedDate,
+                    inLifeCycle: displayedDate == limitDate
+                        ? .Foreground
+                        : lastLifeCycle
+                )
+                _ = saveDisplayed(received: receivedNotification)
             }
         }
-        
-        return removed
     }
     
-    public static func reloadLostSchedulesDisplayed(referenceDate:Date){
-        let referenceEpoch = referenceDate.timeIntervalSince1970.description
-    
-        for (epoch, alreadyDisplayed) in pendingSchedulesDisplayed {
-            if epoch <= referenceEpoch {
-                for (referenceKey, dataMap) in alreadyDisplayed {
-                    if let dataMap = dataMap as? [String:Any] {
-                        shared.set(dataMap, referenceKey:referenceKey)
-                    }
-                }
-                pendingSchedulesDisplayed.removeValue(forKey: epoch)
-            }
-        }
-        
-        updatePendingList()
+    public func cancelDisplayed(id:Int, displayedDate:RealDateTime) -> Bool {
+        return clearDisplayed(id: id, displayedDate: displayedDate)
     }
 
-    public static func cancelAllDisplayed() {
-        shared.removeAll()
-        pendingSchedulesDisplayed.removeAll()
-        updatePendingList()
-    }
-
-    public static func cancelDisplayed(id:Int) {
-        _ = removeDisplayed(id: id)
-        _ = removeScheduledToDisplay(id: id)
+    public func cancelAllDisplayed() -> Bool {
+        storage.removeAll()
+        return true
     }
     
+    private func getNextValidDates(
+        fromScheduleModel scheduleModel: NotificationScheduleModel,
+        startingfromDate referenceDate: RealDateTime,
+        untilDate limitDate: RealDateTime
+    ) -> [RealDateTime] {
+        var currentValidDate = referenceDate
+        var displayedDates:[RealDateTime] = []
+        repeat {
+            guard let nextValidDate =
+                    scheduleModel
+                        .getNextValidDate(
+                            referenceDate: currentValidDate)
+            else { break }
+            
+            if nextValidDate <= limitDate && nextValidDate >= currentValidDate {
+                displayedDates.insert(nextValidDate, at: 0)
+            }
+            
+            print("displayed recovered: \(nextValidDate)")
+            
+            if !scheduleModel.isRepeated() { break }
+            if currentValidDate == nextValidDate { break }
+            
+            currentValidDate = nextValidDate
+        } while currentValidDate < limitDate
+        
+        return displayedDates
+    }
 }

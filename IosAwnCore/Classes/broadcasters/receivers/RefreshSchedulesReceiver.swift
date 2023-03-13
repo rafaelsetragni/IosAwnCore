@@ -14,11 +14,14 @@ class RefreshSchedulesReceiver {
     public func refreshSchedules(){
         let referenceDate = Date()
         
-        let lostSchedules = ScheduleManager.listPendingSchedules(referenceDate: referenceDate)
+        let lostSchedules = ScheduleManager.shared.listPendingSchedules(referenceDate: referenceDate)
         for notificationModel in lostSchedules {
             
             do {
-                let hasNextValidDate:Bool = (notificationModel.schedule?.hasNextValidDate() ?? false)
+                let hasNextValidDate:Bool = notificationModel
+                    .schedule?
+                    .hasNextValidDate(referenceDate: RealDateTime()) ?? false
+                
                 if notificationModel.schedule?.createdDate != nil && hasNextValidDate {
                     try NotificationSenderAndScheduler.send(
                             createdSource: notificationModel.content!.createdSource!,
@@ -30,10 +33,10 @@ class RefreshSchedulesReceiver {
                                             .currentLifeCycle)
                 }
                 else {
-                    let _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
+                    let _ = ScheduleManager.shared.removeSchedule(id: notificationModel.content!.id!)
                 }
             } catch {
-                let _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
+                let _ = ScheduleManager.shared.removeSchedule(id: notificationModel.content!.id!)
                 ExceptionFactory
                         .shared
                         .registerNewAwesomeException(
@@ -52,7 +55,7 @@ class RefreshSchedulesReceiver {
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
             
             if activeSchedules.count > 0 {
-                let schedules = ScheduleManager.listSchedules()
+                let schedules = ScheduleManager.shared.listSchedules()
                 
                 if(!ListUtils.isNullOrEmpty(schedules)){
                     for notificationModel in schedules {
