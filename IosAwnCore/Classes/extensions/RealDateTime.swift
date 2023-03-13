@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RealDateTime: Equatable, Comparable {
+public class RealDateTime: Equatable, Comparable, CustomStringConvertible {
     
     static let units: Set<Calendar.Component> =
         Set(arrayLiteral: .year, .month, .day, .hour, .minute, .second, .timeZone)

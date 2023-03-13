@@ -97,7 +97,7 @@ public class NotificationSenderAndScheduler {
             .shared
             .areNotificationsGloballyAllowed(whenGotResults: { (allowed) in
             
-            do{
+            do {
                 if (allowed){
                     try self.execute(completion: completion)
                 }
@@ -211,78 +211,58 @@ public class NotificationSenderAndScheduler {
         receivedNotification:NotificationReceived?,
         completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
     ){
-        if refreshNotification {
-            completion(true, content, nil)
+        guard let receivedNotification = receivedNotification else {
+            printElapsedTime(scheduled: false)
+            completion(false, nil, nil)
             return
         }
         
-        // Only broadcast if notificationModel is valid
-        if(receivedNotification != nil){
+        defer {
+            printElapsedTime(scheduled: false)
+            completion(true, content, nil)
+        }
+        
+        if refreshNotification { return }
 
-            if(created){
+        let isNotInForeground:Bool =
+                    LifeCycleManager
+                        .shared
+                        .currentLifeCycle != .Foreground
+        
+        if created {
+            if isNotInForeground || SwiftUtils.isRunningOnExtension() {
+                _ = CreatedManager
+                    .shared
+                    .saveCreated(
+                        received: receivedNotification)
+                
+            } else {
                 BroadcastSender
                     .shared
                     .sendBroadcast(
-                        notificationCreated: receivedNotification!,
+                        notificationCreated: receivedNotification,
                         whenFinished: { [self] (created:Bool) in
-                            
-                            if created && scheduled == nil && receivedNotification?.id != nil {
-                                removePastSchedule(withId:receivedNotification!.id!)
-                            }
-                            
-                            if scheduled == nil {
-                                printElapsedTime(scheduled: false)
-                                BroadcastSender
-                                    .shared
-                                    .sendBroadcast(
-                                        notificationDisplayed: receivedNotification!,
-                                        whenFinished: { [self] (created:Bool) in
-                                            completion(true, content, nil)
-                                        })
-                            }
-                            else {
-                                printElapsedTime(scheduled: true)
-                                DisplayedManager
-                                    .saveScheduledToDisplay(
-                                        received: receivedNotification!)
-                                completion(true, content, nil)
-                            }
+                            completion(true, content, nil)
                         })
             }
-            else {
-                
-                if created && scheduled == nil && receivedNotification?.id != nil {
-                    removePastSchedule(withId:receivedNotification!.id!)
-                }
-                
-                if scheduled == nil {
-                    printElapsedTime(scheduled: false)
-                    BroadcastSender
-                        .shared
-                        .sendBroadcast(
-                            notificationDisplayed: receivedNotification!,
-                            whenFinished: { [self] (created:Bool) in
-                                completion(true, content, nil)
-                            })
-                }
-                else {
-                    printElapsedTime(scheduled: true)
-                    DisplayedManager
-                        .saveScheduledToDisplay(
-                            received: receivedNotification!)
-                    completion(true, content, nil)
-                }
-            }
         }
-        else {
-            completion(false, nil, nil)
+        
+        if scheduled != nil { return }
+        
+        if isNotInForeground || SwiftUtils.isRunningOnExtension() {
+            _ = DisplayedManager
+                    .shared
+                    .saveDisplayed(
+                        received: receivedNotification)
+        } else {
+            BroadcastSender
+                .shared
+                .sendBroadcast(
+                    notificationDisplayed: receivedNotification,
+                    whenFinished: { [self] (created:Bool) in
+                        completion(true, content, nil)
+                    })
         }
-    }
-    
-    private func removePastSchedule(withId id:Int){
-        _ = ScheduleManager
-            .shared
-            .remove(referenceKey: String(id))
     }
     
     private func printElapsedTime(scheduled:Bool){

@@ -93,38 +93,54 @@ public class NotificationIntervalModel : NotificationScheduleModel {
         return nil
     }
     
-    public func getNextValidDate() -> RealDateTime? {
+    public func getNextValidDate(referenceDate: RealDateTime = RealDateTime()) -> RealDateTime? {
+        guard let createdDate:RealDateTime = self.createdDate
+        else { return nil }
         let timeZone:TimeZone = self.timeZone ?? TimeZone.current
         
-        let referenceDate:RealDateTime =
-            (self.repeats ?? true) ?
-                RealDateTime(fromTimeZone: timeZone) :
-                createdDate ?? RealDateTime(fromTimeZone: timeZone)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
         
-        guard let nextValidDate:Date =
-            DateUtils
-                .shared
-                .getNextValidDate(
-                    fromScheduleModel: self,
-                    withReferenceDate: referenceDate)        
+        // When repeats is true, calculate the next valid date based on createdDate
+        if self.repeats ?? true {
+            return getNextValidDateWithRepetition(referenceDate: referenceDate, createdDate: createdDate, calendar: calendar, timeZone: timeZone)
+        } else {
+            return getNextValidDateFromCreatedDate(referenceDate: referenceDate, createdDate: createdDate, calendar: calendar, timeZone: timeZone)
+        }
+    }
+
+    private func getNextValidDateWithRepetition(referenceDate: RealDateTime, createdDate: RealDateTime, calendar: Calendar, timeZone: TimeZone) -> RealDateTime? {
+        // Calculate the time interval between the reference date and createdDate
+        let intervalFromCreated = referenceDate.date.secondsSince1970 - createdDate.date.secondsSince1970
+        // Calculate the number of interval multiples between createdDate and the reference date
+        let numIntervals = Int(intervalFromCreated / Int64(self.interval!))
+        // Calculate the next valid date as the next interval multiple after the reference date
+        guard let nextValidDate = calendar.date(byAdding: .second, value: (numIntervals + 1) * self.interval!, to: createdDate.date)
         else { return nil }
         
-        return RealDateTime.init(
-            fromDate: nextValidDate,
-            inTimeZone: timeZone)
+        return RealDateTime.init(fromDate: nextValidDate, inTimeZone: timeZone)
+    }
+
+    private func getNextValidDateFromCreatedDate(referenceDate: RealDateTime, createdDate: RealDateTime, calendar: Calendar, timeZone: TimeZone) -> RealDateTime? {
+        // Calculate the next valid date as a simple time interval from the reference date
+        guard let nextValidDate:Date = calendar.date(
+            byAdding: .second,
+            value: interval!,
+            to: createdDate.date)
+        else { return nil }
+        
+        let nextRealDate = RealDateTime.init(fromDate: nextValidDate, inTimeZone: timeZone)
+        if nextRealDate < referenceDate {
+            print("\(nextRealDate) < \(referenceDate)")
+            return nil
+        }
+        
+        return nextRealDate
     }
     
-    public func hasNextValidDate() -> Bool {
-        
-        let timeZone:TimeZone = self.timeZone ?? TimeZone.current
-        let nowDate:RealDateTime? = RealDateTime(fromTimeZone: timeZone)
-        
-        let nextValidDate:RealDateTime? = getNextValidDate()
-        
-        return
-            nil != nextValidDate &&
-            nil != nowDate &&
-            nextValidDate! > nowDate!
-            
+    public func hasNextValidDate(referenceDate: RealDateTime = RealDateTime()) -> Bool {
+        return getNextValidDate(referenceDate: referenceDate) != nil
     }
+    
+    public func isRepeated() -> Bool { return repeats ?? false }
 }

@@ -166,40 +166,60 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         return dateComponents
     }
     
-    public func getNextValidDate() -> RealDateTime? {
-        let timeZone:TimeZone = self.timeZone ?? TimeZone.current
-        
-        let referenceDate =
-            (self.repeats ?? true) ?
-                RealDateTime(fromTimeZone: timeZone):
-                createdDate ?? RealDateTime(fromTimeZone: timeZone)
-        
-        guard let nextValidDate =
-                    DateUtils
-                        .shared
-                        .getNextValidDate(
-                            fromScheduleModel: self,
-                            withReferenceDate: referenceDate)
-        else {
-            return nil
-        }
-        
-        return RealDateTime(
-            fromDate: nextValidDate,
-            inTimeZone: timeZone)
+    public func getNextValidDate(referenceDate: RealDateTime = RealDateTime()) -> RealDateTime? {
+        guard let createdDate = self.createdDate else { return nil }
+        let timeZone = self.timeZone ?? TimeZone.current
+
+        let refDate = self.repeats ?? true ? createdDate : referenceDate
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+
+        var dateComponents = self.toDateComponents()
+        dateComponents.calendar = calendar
+        dateComponents.timeZone = timeZone
+
+        guard let nextValidDate = calendar
+            .nextDate(
+                after: refDate.date,
+                matching: dateComponents,
+                matchingPolicy: .nextTime
+            )
+        else { return nil }
+
+        return RealDateTime(fromDate: nextValidDate, inTimeZone: timeZone)
     }
     
-    public func hasNextValidDate() -> Bool {
-        
+    public func getssNextValidDate(referenceDate: RealDateTime = RealDateTime()) -> RealDateTime? {
+        guard let createdDate:RealDateTime = self.createdDate
+        else { return nil }
         let timeZone:TimeZone = self.timeZone ?? TimeZone.current
-        let nowDate:RealDateTime? = RealDateTime(fromTimeZone: timeZone)
         
-        let nextValidDate:RealDateTime? = getNextValidDate()
+        let refDate:RealDateTime =
+            self.repeats ?? true
+                ? createdDate
+                : referenceDate
         
-        return
-            nil != nextValidDate &&
-            nil != nowDate &&
-            nextValidDate! > nowDate!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        
+        guard let nextValidDate:Date =
+                calendar.nextDate(
+                    after: refDate.date,
+                    matching: toDateComponents(),
+                    matchingPolicy: .nextTime,
+                    repeatedTimePolicy: .first,
+                    direction: .backward)
+        else { return nil }
+
+        let nextRealDate = RealDateTime.init(fromDate: nextValidDate, inTimeZone: timeZone)
+        if nextRealDate < refDate  { return nil }
+
+        return RealDateTime(fromDate: nextValidDate, inTimeZone: timeZone)
+    }
+    
+    public func hasNextValidDate(referenceDate: RealDateTime = RealDateTime()) -> Bool {
+        return getNextValidDate(referenceDate: referenceDate) != nil
     }
 
     public func getUNNotificationTrigger() -> UNNotificationTrigger? {
@@ -219,5 +239,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         }
         return nil
     }
+    
+    public func isRepeated() -> Bool { return repeats ?? false }
 }
 

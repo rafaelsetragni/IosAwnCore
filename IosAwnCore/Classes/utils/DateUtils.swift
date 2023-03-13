@@ -72,26 +72,6 @@ public class DateUtils {
         return Date() // there is no true timezone component into Dates in swift
     }
     
-    public func getNextValidDate(
-        fromScheduleModel scheduleModel:NotificationScheduleModel,
-        withReferenceDate fixedDateTime:RealDateTime
-    ) -> Date? {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = fixedDateTime.timeZone
-                
-        var nextValidDate:Date?
-        if scheduleModel is NotificationIntervalModel {
-            let scheduleInterval:NotificationIntervalModel = scheduleModel as! NotificationIntervalModel
-            nextValidDate = calendar.date(byAdding: .second, value: scheduleInterval.interval!, to: fixedDateTime.date)
-        } else
-        if scheduleModel is NotificationCalendarModel {
-            let scheduleCalendar:NotificationCalendarModel = scheduleModel as! NotificationCalendarModel
-            nextValidDate = calendar.nextDate(after: fixedDateTime.date, matching: scheduleCalendar.toDateComponents(), matchingPolicy: .nextTime)
-        }
-
-        return nextValidDate
-    }
-    
     public func getLastValidDate(
         scheduleModel:NotificationScheduleModel,
         fixedDateTime:RealDateTime

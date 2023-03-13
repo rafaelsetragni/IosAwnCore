@@ -16,6 +16,7 @@ public protocol NotificationScheduleModel : AbstractModel {
     
     func getUNNotificationTrigger() -> UNNotificationTrigger?
     
-    func hasNextValidDate() -> Bool
-    func getNextValidDate() -> RealDateTime?
+    func isRepeated() -> Bool
+    func hasNextValidDate(referenceDate: RealDateTime) -> Bool
+    func getNextValidDate(referenceDate: RealDateTime) -> RealDateTime?
 }
