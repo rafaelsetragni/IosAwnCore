@@ -16,4 +16,21 @@ public class SwiftUtils{
         }
         return _isExtension!
     }
+    
+    public static func getMainBundle() -> Bundle {
+        var components = Bundle.main.bundleURL.path.split(separator: "/")
+        var bundle: Bundle?
+
+        if let index = components.lastIndex(where: { $0.hasSuffix(".app") }) {
+            components.removeLast((components.count - 1) - index)
+            bundle = Bundle(path: components.joined(separator: "/"))
+        }
+
+        return bundle ?? Bundle.main
+    }
+    
+    public static func getFlutterAssetPath(forAsset assetPath:String) -> String? {
+        var realPath = getMainBundle().bundlePath + "/Frameworks/App.framework/flutter_assets/" + assetPath
+        return realPath
+    }
 }
