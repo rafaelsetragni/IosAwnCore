@@ -10,56 +10,29 @@ import Foundation
 class LocalizationManager {
     static let shared = LocalizationManager()
     
+    let _userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
+    let localizationKey = "awn_localization_languageCode"
+    
     func setLocalization(languageCode: String? = nil) -> Bool {
-        let langCode =
-            languageCode ??
-            Locale.preferredLanguages[0]
         
-        switch SQLitePrimitivesDB.shared.setString(
-            tag: "localization",
-            key: "languageCode",
-            value: langCode
+        guard let userDefaults = _userDefaults ?? UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
+        else { return false }
+        
+        let langCode =
+            (languageCode ?? Locale.preferredLanguages[0])
                 .lowercased()
                 .replacingOccurrences(of: "_", with: "-")
-        ) {
-        case .success():
-            return true
-        case .failure(let error):
-            let awnError = ExceptionFactory.shared.createNewAwesomeException(
-                className: "LocalizationManager",
-                code: ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
-                message: "SQLitePrimitivesDB is not available \(error.localizedDescription)",
-                detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".setLocalization"
-            )
-            print(awnError)
-            return false
-        }
+        
+        userDefaults.set(langCode, forKey: localizationKey)
+        
+        return true
     }
     
     func getLocalization() -> String {
         let appLangCode = Locale.preferredLanguages[0]
-        
-        switch SQLitePrimitivesDB.shared.getString(
-            tag: "localization",
-            key: "languageCode"
-        ) {
-            
-        case .success(let value):
-            return (value ?? appLangCode)
+        let awnLangCode = _userDefaults?.string(forKey: localizationKey)
+        return (awnLangCode ?? appLangCode)
                 .lowercased()
                 .replacingOccurrences(of: "_", with: "-")
-            
-        case .failure(let error):
-            let error = ExceptionFactory.shared.createNewAwesomeException(
-                className: "LocalizationManager",
-                code: ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
-                message: "SQLitePrimitivesDB is not available \(error.localizedDescription)",
-                detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".getLocalization"
-            )
-            print(error)
-            return appLangCode
-                .lowercased()
-                .replacingOccurrences(of: "_", with: "-")
-        }
     }
 }

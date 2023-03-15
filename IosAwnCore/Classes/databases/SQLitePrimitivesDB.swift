@@ -295,8 +295,11 @@ public class SQLitePrimitivesDB {
                     return .success((value == 1) as? T)
 
                 case is String.Type:
-                    let value = String(cString: sqlite3_column_text(statement, 0))
-                    return .success(value as? T)
+                    let value = sqlite3_column_text(statement, 0)
+                    if value != nil {
+                        return .success(String(cString: value!) as? T)
+                    }
+                    return .success(nil)
 
                 default:
                     return .failure(SQLiteError.invalidParameterType)
@@ -355,7 +358,9 @@ public class SQLitePrimitivesDB {
                 defer { sqlite3_finalize(statement) }
                 
                 while sqlite3_step(statement) == SQLITE_ROW {
-                    count = Int(sqlite3_column_int(statement, 0))
+                    let value = sqlite3_column_int(statement, 0)
+                    if value != nil { count = Int(value) }
+                    else { count = 0 }
                 }
                 return .success(count)
 
@@ -412,10 +417,12 @@ public class SQLitePrimitivesDB {
                 defer { sqlite3_finalize(statement) }
                 
                 while sqlite3_step(statement) == SQLITE_ROW {
-                    let key = String(cString: sqlite3_column_text(statement, 0))
-                    let value = valueGetter(statement)
-
-                    values[key] = value
+                    let rawValue = sqlite3_column_text(statement, 0)
+                    if rawValue != nil {
+                        let key = String(cString: rawValue!)
+                        let value = valueGetter(statement)
+                        values[key] = value
+                    }
                 }
                 return .success(values)
 
@@ -476,10 +483,12 @@ public class SQLitePrimitivesDB {
                 defer { sqlite3_finalize(statement) }
                 
                 while sqlite3_step(statement) == SQLITE_ROW {
-                    let key = String(cString: sqlite3_column_text(statement, 0))
-                    let value = valueGetter(statement)
-
-                    values[key] = value
+                    let rawValue = sqlite3_column_text(statement, 0)
+                    if rawValue != nil {
+                        let key = String(cString: rawValue!)
+                        let value = valueGetter(statement)
+                        values[key] = value
+                    }
                 }
                 return .success(values)
 
