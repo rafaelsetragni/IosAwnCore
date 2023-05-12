@@ -7,27 +7,41 @@
 
 import Foundation
 
-public class ActionManager {
+public class ActionManager : EventManager {
     static let TAG = "ActionManager"
-    static var recovered:Bool  = false
+    var recovered:Bool  = false
     
     // Cache is necessary due user preferences are not aways ready for return data
     // if the respective value is request too fast.
-    static var actionCache:[Int:ActionReceived] = [:]
-    static var initialAction:ActionReceived?
-    static var removeInitialActionFromCache:Bool = false
+    var actionCache:[Int:ActionReceived] = [:]
+    var initialAction:ActionReceived?
+    var removeInitialActionFromCache:Bool = false
     
-    public static func removeAction(id:Int) -> Bool {
+    // **************************** SINGLETON PATTERN *************************************
+    
+    static var instance:ActionManager?
+    public static var shared:ActionManager {
+        get {
+            ActionManager.instance =
+            ActionManager.instance ?? ActionManager()
+            return ActionManager.instance!
+        }
+    }
+    private override init(){}
+    
+    // **************************** SINGLETON PATTERN *************************************
+    
+    public func removeAction(id:Int) -> Bool {
         return actionCache.removeValue(forKey: id) != nil
     }
 
-    public static func recoverActions() -> [ActionReceived] {
+    public func recoverActions() -> [ActionReceived] {
         if recovered { return [] }
         recovered = true
         return Array(actionCache.values)
     }
 
-    public static func saveAction(received:ActionReceived) {
+    public func saveAction(received:ActionReceived) {
         if received.actionLifeCycle == .AppKilled {
             initialAction = received
             if removeInitialActionFromCache { return }
@@ -35,15 +49,15 @@ public class ActionManager {
         actionCache[received.id!] = received
     }
 
-    public static func getActionByKey(id:Int) -> ActionReceived? {
+    public func getActionByKey(id:Int) -> ActionReceived? {
         return actionCache[id]
     }
     
-    public static func removeAllActions() {
+    public func removeAllActions() {
         actionCache.removeAll()
     }
     
-    public static func getInitialAction(removeFromEvents:Bool) -> ActionReceived? {
+    public func getInitialAction(removeFromEvents:Bool) -> ActionReceived? {
         if initialAction == nil { return nil }
         if removeFromEvents {
             removeInitialActionFromCache = true
@@ -55,5 +69,9 @@ public class ActionManager {
     //public static func removeAction(id:Int) {
     //    actionCache.removeValue(forKey: id)
     //}
+    
+    public func commit() {
+        
+    }
     
 }

@@ -21,9 +21,11 @@ public class NotificationModel : AbstractModel {
     
     public init(){}
     
-    public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
+    public convenience init?(fromMap arguments: [String : Any?]?){
+        if arguments?.isEmpty ?? true { return nil }
         
         do {
+            self.init()
             self.content = extractNotificationContent(Definitions.NOTIFICATION_MODEL_CONTENT, arguments)
             
             if(self.content == nil){ return nil }
@@ -31,15 +33,11 @@ public class NotificationModel : AbstractModel {
             self.schedule = try extractNotificationSchedule(Definitions.NOTIFICATION_MODEL_SCHEDULE, arguments)
             self.actionButtons = extractNotificationButtons(Definitions.NOTIFICATION_MODEL_BUTTONS, arguments)
             self.localizations = extractLocalizations(Definitions.NOTIFICATION_MODEL_LOCALIZATIONS, arguments)
-            
-            return self
-        
         }
         catch {
             Logger.e("NotificationModel", error.localizedDescription)
+            return nil
         }
-            
-        return nil
     }
     
     public func toMap() -> [String : Any?] {
@@ -68,7 +66,7 @@ public class NotificationModel : AbstractModel {
     func extractNotificationContent(_ reference:String, _ arguments:[String:Any?]?) -> NotificationContentModel? {
         guard let map:[String:Any?] = arguments?[reference] as? [String:Any?] else { return nil }
         if(map.isEmpty){ return nil }
-        return NotificationContentModel().fromMap(arguments: map) as? NotificationContentModel
+        return NotificationContentModel(fromMap: map)
     }
     
     func extractNotificationSchedule(_ reference:String, _ arguments:[String:Any?]?) throws -> NotificationScheduleModel? {
@@ -91,10 +89,10 @@ public class NotificationModel : AbstractModel {
         }
         
         if map["interval"] != nil {
-            return NotificationIntervalModel().fromMap(arguments: map) as? NotificationScheduleModel
+            return NotificationIntervalModel(fromMap: map)
         }
         else {
-            return NotificationCalendarModel().fromMap(arguments: map) as? NotificationScheduleModel
+            return NotificationCalendarModel(fromMap: map)
         }
     }
     
@@ -105,9 +103,9 @@ public class NotificationModel : AbstractModel {
         var actionButtons:[NotificationButtonModel] = []
         
         for buttonData in actionButtonsData {
-            let button:NotificationButtonModel? = NotificationButtonModel().fromMap(arguments: buttonData) as? NotificationButtonModel
-            if(button == nil){ return nil }
-            actionButtons.append(button!)
+            guard let button:NotificationButtonModel = NotificationButtonModel(fromMap: buttonData)
+            else { continue }
+            actionButtons.append(button)
         }
         
         return actionButtons
@@ -120,10 +118,8 @@ public class NotificationModel : AbstractModel {
         var localizations:[String:NotificationLocalizationModel] = [:]
         
         for (languageCode, localizationData) in localizationsData {
-            let localizationModel = NotificationLocalizationModel()
-                .fromMap(arguments: localizationData) as? NotificationLocalizationModel
-            
-            if(localizationModel == nil){ return nil }
+            guard let localizationModel = NotificationLocalizationModel(fromMap: localizationData)
+            else { continue }
             localizations[languageCode] = localizationModel
         }
         

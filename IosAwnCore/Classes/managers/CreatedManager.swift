@@ -43,9 +43,8 @@ public class CreatedManager : EventManager {
         let dataList = storage.getAllObjects()
         
         for data in dataList {
-            let received:NotificationReceived? = NotificationReceived(nil)
-                .fromMap(arguments: data) as? NotificationReceived
-            guard let received = received else { continue }
+            guard let received = NotificationReceived(fromMap: data)
+            else { continue }
             returnedList.append(received)
         }
         
@@ -57,9 +56,8 @@ public class CreatedManager : EventManager {
         let dataList = storage.getAllObjectsStarting(with: getKeyById(id: id))
         
         for data in dataList {
-            let received:NotificationReceived? = NotificationReceived(nil)
-                .fromMap(arguments: data) as? NotificationReceived
-            guard let received = received else { continue }
+            guard let received = NotificationReceived(fromMap: data)
+            else { continue }
             if received.id != id { continue }
             returnedList.append(received)
         }
@@ -68,22 +66,19 @@ public class CreatedManager : EventManager {
     }
     
     public func getCreatedByKeyAndDate(id:Int, createdDate:RealDateTime) -> NotificationReceived? {
-        guard let data:[String:Any?] = storage.get(
+        return NotificationReceived(fromMap: storage.get(
             referenceKey: getKeyByIdAndDate(
                 id: id,
                 referenceDate: createdDate
-            )
-        ) else {
-          return nil
-        }
-        return NotificationReceived(nil).fromMap(arguments: data) as? NotificationReceived
+            ))
+        )
     }
 
-    public func cancelAllCreated() {
+    public func removeAllCreated() {
         storage.removeAll()
     }
     
-    public func cancelCreated(id:Int, createdDate:RealDateTime) -> Bool {
+    public func removeCreated(id:Int, createdDate:RealDateTime) -> Bool {
         return storage.remove(
             referenceKey: getKeyByIdAndDate(
                 id: id,

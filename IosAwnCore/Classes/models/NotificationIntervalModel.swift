@@ -35,14 +35,20 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     
     public init(){}
     
-    public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
+    public convenience init?(fromMap arguments: [String : Any?]?){
+        if arguments?.isEmpty ?? true { return nil }
         
-        self._timeZone = MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
-        self.createdDate = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INITIAL_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
-        self.interval = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INTERVAL, arguments: arguments)
-        self.repeats  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
-        
-        return self
+        do {
+            self.init()
+            self._timeZone = MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
+            self.createdDate = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INITIAL_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+            self.interval = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INTERVAL, arguments: arguments)
+            self.repeats  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
+        }
+        catch {
+            Logger.e(Self.TAG, error.localizedDescription)
+            return nil
+        }
     }
     
     public func toMap() -> [String : Any?] {

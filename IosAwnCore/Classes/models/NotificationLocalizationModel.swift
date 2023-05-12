@@ -25,16 +25,22 @@ public class NotificationLocalizationModel : AbstractModel {
     
     public init(){}
     
-    public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
+    public convenience init?(fromMap arguments: [String : Any?]?){
+        if arguments?.isEmpty ?? true { return nil }
         
-        self.title      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE, arguments: arguments)
-        self.body       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY, arguments: arguments)
-        self.summary    = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SUMMARY, arguments: arguments)
-        self.largeIcon  = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
-        self.bigPicture = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BIG_PICTURE, arguments: arguments)
-        self.buttonLabels = MapUtils<[String:String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_LABELS, arguments: arguments)
-        
-        return self
+        do {
+            self.init()
+            self.title      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE, arguments: arguments)
+            self.body       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY, arguments: arguments)
+            self.summary    = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SUMMARY, arguments: arguments)
+            self.largeIcon  = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
+            self.bigPicture = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BIG_PICTURE, arguments: arguments)
+            self.buttonLabels = MapUtils<[String:String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_LABELS, arguments: arguments)
+        }
+        catch {
+            Logger.e(Self.TAG, error.localizedDescription)
+            return nil
+        }
     }
     
     public func toMap() -> [String : Any?] {

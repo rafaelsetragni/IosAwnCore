@@ -30,7 +30,7 @@ public class SwiftUtils{
     }
     
     public static func getFlutterAssetPath(forAsset assetPath:String) -> String? {
-        var realPath = getMainBundle().bundlePath + "/Frameworks/App.framework/flutter_assets/" + assetPath
+        let realPath = getMainBundle().bundlePath + "/Frameworks/App.framework/flutter_assets/" + assetPath
         return realPath
     }
 }

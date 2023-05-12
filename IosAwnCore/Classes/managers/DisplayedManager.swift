@@ -43,10 +43,8 @@ public class DisplayedManager : EventManager {
         let dataList = storage.getAllObjects()
         
         for data in dataList {
-            let received:NotificationReceived? =
-            NotificationReceived(nil)
-                .fromMap(arguments: data) as? NotificationReceived
-            guard let received = received else { continue }
+            guard let received = NotificationReceived(fromMap: data)
+            else { continue }
             returnedList.append(received)
         }
         
@@ -58,9 +56,8 @@ public class DisplayedManager : EventManager {
         let dataList = storage.getAllObjectsStarting(with: getKeyById(id: id))
         
         for data in dataList {
-            let received:NotificationReceived? = NotificationReceived(nil)
-                .fromMap(arguments: data) as? NotificationReceived
-            guard let received = received else { continue }
+            guard let received = NotificationReceived(fromMap: data)
+            else { continue }
             if received.id != id { continue }
             returnedList.append(received)
         }
@@ -77,7 +74,7 @@ public class DisplayedManager : EventManager {
         ) else {
           return nil
         }
-        return NotificationReceived(nil).fromMap(arguments: data) as? NotificationReceived
+        return NotificationReceived(fromMap: data)
     }
     
     public func clearDisplayed(id:Int, displayedDate:RealDateTime) -> Bool {
@@ -123,13 +120,16 @@ public class DisplayedManager : EventManager {
         }
     }
     
-    public func cancelDisplayed(id:Int, displayedDate:RealDateTime) -> Bool {
+    public func removeDisplayed(id:Int, displayedDate:RealDateTime) -> Bool {
         return clearDisplayed(id: id, displayedDate: displayedDate)
     }
 
-    public func cancelAllDisplayed() -> Bool {
+    public func removeAllDisplayed() {
         storage.removeAll()
-        return true
+    }
+    
+    public func commit() {
+        
     }
     
     private func getNextValidDates(

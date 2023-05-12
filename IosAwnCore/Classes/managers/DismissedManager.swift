@@ -7,43 +7,59 @@
 
 import Foundation
 
-public class DismissedManager {
+public class DismissedManager : EventManager {
     
-    static let sharedManager:SharedManager = SharedManager(tag: Definitions.SHARED_DISMISSED)
+    let sharedManager:SharedManager = SharedManager(tag: Definitions.SHARED_DISMISSED)
     
-    public static func removeDismissed(id:Int) -> Bool {
+    // **************************** SINGLETON PATTERN *************************************
+    
+    static var instance:DismissedManager?
+    public static var shared:DismissedManager {
+        get {
+            DismissedManager.instance =
+            DismissedManager.instance ?? DismissedManager()
+            return DismissedManager.instance!
+        }
+    }
+    private override init(){}
+    
+    // **************************** SINGLETON PATTERN *************************************
+    
+    public func removeDismissed(id:Int) -> Bool {
         return sharedManager.remove(referenceKey: String(id));
     }
 
-    public static func listDismissed() -> [ActionReceived] {
+    public func listDismissed() -> [ActionReceived] {
         var returnedList:[ActionReceived] = []
         let dataList = sharedManager.getAllObjects()
         
         for data in dataList {
-            let received:ActionReceived = ActionReceived(nil).fromMap(arguments: data) as! ActionReceived
+            guard let received = ActionReceived(fromMap: data)
+            else { continue }
             returnedList.append(received)
         }
         
         return returnedList
     }
 
-    public static func saveDismissed(received:NotificationReceived) {
+    public func saveDismissed(received:NotificationReceived) {
         sharedManager.set(received.toMap(), referenceKey: String(received.id!))
     }
 
-    public static func getDismissedByKey(id:Int) -> ActionReceived? {
-        guard let data:[String:Any?] = sharedManager.get(referenceKey: String(id)) else {
-          return nil
-        }
-        return ActionReceived(nil).fromMap(arguments: data) as? ActionReceived
+    public func getDismissedByKey(id:Int) -> ActionReceived? {
+        return ActionReceived(fromMap: sharedManager.get(referenceKey: String(id)))
     }
 
-    public static func removeAllDismissed() {
+    public func removeAllDismissed() {
         sharedManager.removeAll()
     }
 
-    public static func removeDismissed(id:Int) {
+    public func cancelDismissed(id:Int) {
         _ = sharedManager.remove(referenceKey: String(id))
+    }
+    
+    public func commit() {
+        
     }
     
 }

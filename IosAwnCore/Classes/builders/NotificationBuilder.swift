@@ -22,20 +22,12 @@ public class NotificationBuilder {
     // ********************************************************
     
     public func jsonDataToNotificationModel(jsonData:[String : Any?]?) -> NotificationModel? {
-        if jsonData?.isEmpty ?? true { return nil }
-
-        let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: jsonData!) as? NotificationModel
-        return notificationModel
+        return NotificationModel(fromMap: jsonData)
     }
     
     public func jsonToNotificationModel(jsonData:String?) -> NotificationModel? {
         if StringUtils.shared.isNullOrEmpty(jsonData) { return nil }
-        
-        let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
-        if data == nil { return nil }
-        
-        let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: data!) as? NotificationModel
-        return notificationModel
+        return NotificationModel(fromMap: JsonUtils.fromJson(jsonData))
     }
     
     public func buildNotificationFromJson(jsonData:String?) -> NotificationModel? {
@@ -303,7 +295,7 @@ public class NotificationBuilder {
     
     private func setSummary(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         if #available(iOS 12.0, *) {
-            content.summaryArgument = notificationModel.content!.summary?.withoutHtmlTags() ?? ""
+            content.subtitle = notificationModel.content!.summary?.withoutHtmlTags() ?? ""
         }
     }
     

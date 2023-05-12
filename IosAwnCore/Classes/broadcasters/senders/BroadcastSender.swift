@@ -69,8 +69,8 @@ class BroadcastSender {
         actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
-        if !ActionManager.recovered { //LifeCycleManager.shared.currentLifeCycle == .AppKilled
-            ActionManager.saveAction(received: actionReceived)
+        if !ActionManager.shared.recovered { //LifeCycleManager.shared.currentLifeCycle == .AppKilled
+            ActionManager.shared.saveAction(received: actionReceived)
             Logger.d(TAG, "action saved")
         }
         else {
@@ -90,7 +90,7 @@ class BroadcastSender {
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
-            DismissedManager.saveDismissed(received: actionReceived)
+            DismissedManager.shared.saveDismissed(received: actionReceived)
         }
         else {
             AwesomeEventsReceiver

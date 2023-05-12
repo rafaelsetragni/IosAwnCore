@@ -8,6 +8,7 @@
 import Foundation
 
 public class NotificationCalendarModel : NotificationScheduleModel {
+    static let TAG = "NotificationCalendarModel"
     
     var _createdDate:RealDateTime?
     var _timeZone:TimeZone?
@@ -49,43 +50,49 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
     var repeats:Bool?
     
-    public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
+    public convenience init?(fromMap arguments: [String : Any?]?){
+        if arguments?.isEmpty ?? true { return nil }
         
-        self._createdDate =
-            MapUtils<RealDateTime>.getRealDateOrDefault(
-                reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
-        
-        self._timeZone =
-            MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
-        
-        self.year = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_YEAR, arguments: arguments)
-        self.month = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MONTH, arguments: arguments)
-        self.day = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_DAY, arguments: arguments)
-        self.hour = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_HOUR, arguments: arguments)
-        self.minute = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MINUTE, arguments: arguments)
-        self.second = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_SECOND, arguments: arguments)
-        self.weekday = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, arguments: arguments)
-        self.weekOfMonth = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, arguments: arguments)
-        self.weekOfYear = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, arguments: arguments)
-        
-        self.repeats = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
-        
-        if (self.year ?? 0) < 0 { self.year = nil }
-        if (self.month ?? 0) < 0 { self.month = nil }
-        if (self.day ?? 0) < 0 { self.day = nil }
-        if (self.hour ?? 0) < 0 { self.hour = nil }
-        if (self.minute ?? 0) < 0 { self.minute = nil }
-        if (self.second ?? 0) < 0 { self.second = nil }
-        if (self.weekday ?? 0) < 0 { self.weekday = nil }
-        if (self.weekOfMonth ?? 0) < 0 { self.weekOfMonth = nil }
-        if (self.weekOfYear ?? 0) < 0 { self.weekOfYear = nil }
-        
-        // https://github.com/rafaelsetragni/awesome_notifications/issues/153#issuecomment-830732722
-        if(self.weekday != nil){
-            self.weekday = self.weekday == 7 ? 1 : (self.weekday! + 1)
+        do {
+            self.init()
+            self._createdDate =
+                MapUtils<RealDateTime>.getRealDateOrDefault(
+                    reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+            
+            self._timeZone =
+                MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
+            
+            self.year = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_YEAR, arguments: arguments)
+            self.month = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MONTH, arguments: arguments)
+            self.day = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_DAY, arguments: arguments)
+            self.hour = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_HOUR, arguments: arguments)
+            self.minute = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MINUTE, arguments: arguments)
+            self.second = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_SECOND, arguments: arguments)
+            self.weekday = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, arguments: arguments)
+            self.weekOfMonth = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, arguments: arguments)
+            self.weekOfYear = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, arguments: arguments)
+            
+            self.repeats = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
+            
+            if (self.year ?? 0) < 0 { self.year = nil }
+            if (self.month ?? 0) < 0 { self.month = nil }
+            if (self.day ?? 0) < 0 { self.day = nil }
+            if (self.hour ?? 0) < 0 { self.hour = nil }
+            if (self.minute ?? 0) < 0 { self.minute = nil }
+            if (self.second ?? 0) < 0 { self.second = nil }
+            if (self.weekday ?? 0) < 0 { self.weekday = nil }
+            if (self.weekOfMonth ?? 0) < 0 { self.weekOfMonth = nil }
+            if (self.weekOfYear ?? 0) < 0 { self.weekOfYear = nil }
+            
+            // https://github.com/rafaelsetragni/awesome_notifications/issues/153#issuecomment-830732722
+            if(self.weekday != nil){
+                self.weekday = self.weekday == 7 ? 1 : (self.weekday! + 1)
+            }
         }
-
-        return self
+        catch {
+            Logger.e(Self.TAG, error.localizedDescription)
+            return nil
+        }
     }
 
     public func toMap() -> [String : Any?] {

@@ -1,6 +1,7 @@
 public enum Definitions {
+    public static let  MAIN_BUNDLE_ID = Bundle.main.getBundleName()
     public static let  USER_DEFAULT_TAG =
-    Bundle.main.infoDictionary?["AwnAppGroupName"] as? String ?? ("group.awn." + Bundle.main.getBundleName().md5.prefix(8))
+    Bundle.main.infoDictionary?["AwnAppGroupName"] as? String ?? ("group.awn." + MAIN_BUNDLE_ID.md5.prefix(8))
     
     public static let  TEST_APP_GROUP = "AAA"
     
@@ -25,8 +26,11 @@ public enum Definitions {
     public static let  BROADCAST_DEFAULT_ACTION = "broadcast.awesome_notifications.DEFAULT_ACTION"
     public static let  BROADCAST_BACKGROUND_ACTION = "broadcast.awesome_notifications.BACKGROUND_ACTION"
     public static let  EXTRA_BROADCAST_MESSAGE = "notification"
- 
+    
     public static let  ACTION_HANDLE = "actionHandle"
+    public static let  CREATED_HANDLE = "createdHandle"
+    public static let  DISPLAYED_HANDLE = "displayedHandle"
+    public static let  DISMISSED_HANDLE = "dismissedHandle"
     public static let  SILENT_HANDLE = "awesomeSilentHandle"
     public static let  BACKGROUND_HANDLE = "awesomeDartBGHandle"
     public static let  RECOVER_DISPLAYED = "recoverScheduledDisplayed"
@@ -75,6 +79,7 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"
     public static let  CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle"
     public static let  CHANNEL_METHOD_SILENT_CALLBACK = "silentCallbackReference"
+    public static let  CHANNEL_METHOD_SET_EVENTS_HANDLES = "setEventHandles"
 
     public static let  CHANNEL_METHOD_GET_FCM_TOKEN = "getFirebaseToken"
     public static let  CHANNEL_METHOD_NEW_FCM_TOKEN = "newTokenReceived"
@@ -233,7 +238,7 @@ public enum Definitions {
     public static let  NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle"
 
     public static let  initialValues = [
-        Definitions.NOTIFICATION_ID: 0,
+        Definitions.NOTIFICATION_ID: -1,
         Definitions.NOTIFICATION_SCHEDULE_REPEATS: false,
         Definitions.NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
         Definitions.NOTIFICATION_LAYOUT: NotificationLayout.Default,
@@ -265,7 +270,6 @@ public enum Definitions {
         Definitions.NOTIFICATION_PLAY_SOUND: true,
         Definitions.NOTIFICATION_AUTO_DISMISSIBLE: true,
         Definitions.NOTIFICATION_LOCKED: false,
-        Definitions.NOTIFICATION_TICKER: "",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
         Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,

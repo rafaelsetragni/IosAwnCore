@@ -40,6 +40,21 @@ public class DefaultsManager {
         set { userDefaults.setValue(newValue, forKey: Definitions.ACTION_HANDLE) }
     }
     
+    public var createdCallback:Int64 {
+        get { return Int64(userDefaults.object(forKey: Definitions.CREATED_HANDLE) as? Int64 ?? 0) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.CREATED_HANDLE) }
+    }
+    
+    public var displayedCallback:Int64 {
+        get { return Int64(userDefaults.object(forKey: Definitions.DISPLAYED_HANDLE) as? Int64 ?? 0) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.DISPLAYED_HANDLE) }
+    }
+    
+    public var dismissedCallback:Int64 {
+        get { return Int64(userDefaults.object(forKey: Definitions.DISMISSED_HANDLE) as? Int64 ?? 0) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.DISMISSED_HANDLE) }
+    }
+    
     public var backgroundCallback:Int64 {
         get { return Int64(userDefaults.object(forKey: Definitions.BACKGROUND_HANDLE) as? Int64 ?? 0) }
         set { userDefaults.setValue(newValue, forKey: Definitions.BACKGROUND_HANDLE) }

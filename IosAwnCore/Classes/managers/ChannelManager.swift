@@ -36,7 +36,8 @@ public class ChannelManager {
         let dataList = sharedManager.getAllObjects()
         
         for data in dataList {
-            let channel:NotificationChannelModel = NotificationChannelModel().fromMap(arguments: data) as! NotificationChannelModel
+            guard let channel = NotificationChannelModel(fromMap: data)
+            else { continue }
             returnedList.append(channel)
         }
         
@@ -54,10 +55,7 @@ public class ChannelManager {
     }
     
     public func getChannelByKey(channelKey:String) -> NotificationChannelModel? {
-        guard let data:[String:Any?] = sharedManager.get(referenceKey: channelKey) else {
-          return nil
-        }
-        return NotificationChannelModel().fromMap(arguments: data) as? NotificationChannelModel
+        return NotificationChannelModel(fromMap: sharedManager.get(referenceKey: channelKey))
     }
     
     public func isNotificationChannelActive(channel: NotificationChannelModel) -> Bool {

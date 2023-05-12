@@ -46,8 +46,9 @@ public class ScheduleManager : EventManager {
         let dataList = storage.getAllObjects()
         
         for data in dataList {
-            let channel:NotificationModel = NotificationModel().fromMap(arguments: data) as! NotificationModel
-            returnedList.append(channel)
+            guard let schedule = NotificationModel(fromMap: data)
+            else { continue }
+            returnedList.append(schedule)
         }
         
         return returnedList
@@ -101,10 +102,7 @@ public class ScheduleManager : EventManager {
     }
     
     public func getScheduleByKey( id:Int ) -> NotificationModel? {
-        guard let data:[String:Any?] = storage.get(referenceKey: String(id)) else {
-          return nil
-        }
-        return NotificationModel().fromMap(arguments: data) as? NotificationModel
+        return NotificationModel(fromMap: storage.get(referenceKey: String(id)))
     }
     
     public func isNotificationScheduleActive( channelKey:String ) -> Bool {
@@ -119,5 +117,47 @@ public class ScheduleManager : EventManager {
 
     public func cancelScheduled(id:Int) -> Bool {
         return storage.remove(referenceKey: String(id))
+    }
+        
+    public func syncAllPendingSchedules(
+        whenGotResults completionHandler: @escaping ([NotificationModel]) throws -> Void
+    ){
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { result in
+            do {
+                var serializeds:[[String:Any?]]  = []
+                
+                if result.count == 0 {
+                    _ = CancellationManager.shared.cancelAllSchedules()
+                    try completionHandler([])
+                    return
+                }
+                
+                let schedules = ScheduleManager.shared.listSchedules()
+                if(!ListUtils.isNullOrEmpty(schedules)){
+                    for notificationModel in schedules {
+                        var founded = false
+                        for activeSchedule in result {
+                            if activeSchedule.identifier == String(notificationModel.content!.id!) {
+                                founded = true
+                                let serialized:[String:Any?] = notificationModel.toMap()
+                                serializeds.append(serialized)
+                                break;
+                            }
+                        }
+                        if(!founded){
+                            _ = CancellationManager.shared.cancelSchedule(byId: notificationModel.content!.id!)
+                        }
+                    }
+                }
+                try completionHandler(schedules)
+            } catch {
+                Logger.e("syncAllPendingSchedules", error.localizedDescription)
+                do {
+                    try completionHandler([])
+                } catch {
+                    Logger.e("syncAllPendingSchedules", error.localizedDescription)
+                }
+            }
+        })
     }
 }

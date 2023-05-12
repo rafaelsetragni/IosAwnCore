@@ -74,8 +74,8 @@ public class NotificationActionReceiver {
                     }
                 }
                 
-                notificationModel = NotificationModel()
-                if notificationModel?.fromMap(arguments: mapData) == nil {
+                notificationModel = NotificationModel(fromMap: mapData)
+                if notificationModel == nil {
                     throw ExceptionFactory
                         .shared
                         .createNewAwesomeException(

@@ -9,7 +9,6 @@ import Foundation
 
 public protocol AbstractModel: AnyObject {
     
-    func fromMap(arguments: [String : Any?]?) -> AbstractModel?
     func toMap() -> [String : Any?]
 
     func validate() throws
