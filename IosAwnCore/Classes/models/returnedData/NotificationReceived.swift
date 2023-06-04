@@ -8,10 +8,12 @@
 import Foundation
 
 public class NotificationReceived : NotificationContentModel {
-        
+    
     public convenience init?(fromMap arguments: [String : Any?]?){
         if arguments?.isEmpty ?? true { return nil }
-        self.init(fromMap: arguments)
+        
+        guard let contentModel = NotificationContentModel(fromMap: arguments) else { return nil }
+        self.init(contentModel)
     }
     
     init(_ contentModel:NotificationContentModel?){
