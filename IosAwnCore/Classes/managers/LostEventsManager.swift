@@ -59,7 +59,7 @@ public class LostEventsManager {
         dismissedHandle:Int64
     ) throws -> [EventRegister] {
         var lostEvents:[EventRegister] = []
-        if actionHandle <= 0 { return lostEvents }
+        if actionHandle == 0 { return lostEvents }
         
         let locked = recoverLostEventsLock.lock(
             before: Date().addingTimeInterval(timeoutLockedProcess)
@@ -67,20 +67,20 @@ public class LostEventsManager {
         defer { if locked { recoverLostEventsLock.unlock() } }
         
         lostEvents += try recoverLostCreatedEvents(
-            hasHandleRegistered: createdHandle > 0
+            hasHandleRegistered: createdHandle != 0
         )
         
         lostEvents += try recoverLostDisplayedEvents(
-            hasHandleRegistered: displayedHandle > 0,
+            hasHandleRegistered: displayedHandle != 0,
             withReferenceLifeCycle: withReferenceLifeCycle
         )
         
         lostEvents += try recoverLostDismissedEvents(
-            hasHandleRegistered: dismissedHandle > 0
+            hasHandleRegistered: dismissedHandle != 0
         )
         
         lostEvents += try recoverLostActionEvents(
-            hasHandleRegistered: actionHandle > 0
+            hasHandleRegistered: actionHandle != 0
         )
         
         return lostEvents.sorted()

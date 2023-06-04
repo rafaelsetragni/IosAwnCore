@@ -39,7 +39,9 @@ public class ActionReceived : NotificationReceived {
         if arguments?.isEmpty ?? true { return nil }
         
         do {
-            self.init(fromMap: arguments)
+            guard let contentModel = NotificationReceived(fromMap: arguments) else { return nil }
+            self.init(contentModel)
+            
             self.buttonKeyPressed = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, arguments: arguments)
             self.buttonKeyInput   = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_INPUT, arguments: arguments)
             

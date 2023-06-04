@@ -10,6 +10,7 @@
 		0048A6225C13DD21C8141D4C2E212A3B /* BackgroundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279FDBF3A4C356D0C0F6B18976B943CE /* BackgroundService.swift */; };
 		01890770907DB186A4ED908F2AF34016 /* LifeCycleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F140FA1DBCCB2CA453E1AE9302263C /* LifeCycleManager.swift */; };
 		057971F44D4C4656CC2DBE9ED98E13F5 /* NotificationActionReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84442C50BFBC35538C26D72A04A39331 /* NotificationActionReceiver.swift */; };
+		05A96B7A2A126F3700F07E06 /* LostEventsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A96B792A126F3600F07E06 /* LostEventsManager.swift */; };
 		083E62E4307D3C4940147CE49EA6C873 /* RefreshSchedulesReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A83F34AAB5C4D95230928EE4A53B68F /* RefreshSchedulesReceiver.swift */; };
 		0A6BBEA9E5913BF116A61E001BA3C17B /* ActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB179F60ED21C17011318733738F8C2 /* ActionManager.swift */; };
 		0D37D9E7F7E2B19DACCE2D71A758EF79 /* AwesomeEventsReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407C971CDECEAFE7FE586E6814853CFA /* AwesomeEventsReceiver.swift */; };
@@ -158,6 +159,7 @@
 
 /* Begin PBXFileReference section */
 		0221907F3CD56C4D67D3E28CB0DF8288 /* Pods-IosAwnCore_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-IosAwnCore_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		05A96B792A126F3600F07E06 /* LostEventsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LostEventsManager.swift; sourceTree = "<group>"; };
 		08AAD93331F874AFCB3600777AAD5ECA /* NotificationButtonModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationButtonModel.swift; sourceTree = "<group>"; };
 		0A0702E30944596E0CDEA973D02B7322 /* StatusBarManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
 		0A32997B1FB08DF3D74CE6C572EFE500 /* ActionReceived.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionReceived.swift; sourceTree = "<group>"; };
@@ -186,7 +188,7 @@
 		39F140FA1DBCCB2CA453E1AE9302263C /* LifeCycleManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LifeCycleManager.swift; sourceTree = "<group>"; };
 		3A72B89E07F231E4FBCAECEBEDFF3BF4 /* MapUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MapUtils.swift; sourceTree = "<group>"; };
 		3AA8B5620B4ED4747F238D94DB86E109 /* DismissedManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DismissedManager.swift; sourceTree = "<group>"; };
-		3D4BE0F1F365145A93BC9EDBE4A97023 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		3D4BE0F1F365145A93BC9EDBE4A97023 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3D612D3C0D96577C35A5292316B09EE3 /* BackgroundExecutor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundExecutor.swift; sourceTree = "<group>"; };
 		3F0D66CF296ABBC57EC4D0452397E235 /* SwiftSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftSupport.swift; path = FBSnapshotTestCase/SwiftSupport.swift; sourceTree = "<group>"; };
 		3FEE2B4A6D6221D6D6E6344FA84E93B5 /* BadgeManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
@@ -231,7 +233,7 @@
 		7E1B7EA746BF6557FD565BAE12AF9198 /* FBSnapshotTestController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestController.m; path = FBSnapshotTestCase/FBSnapshotTestController.m; sourceTree = "<group>"; };
 		7E8873CCF288F260979F12B3F4BDF82A /* NotificationModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		83215FF0D9051BEF89F8783069886D40 /* Pods-IosAwnCore_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-IosAwnCore_Example-Info.plist"; sourceTree = "<group>"; };
-		840089410D030E0374AA8A5F42E60DFE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		840089410D030E0374AA8A5F42E60DFE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		84442C50BFBC35538C26D72A04A39331 /* NotificationActionReceiver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationActionReceiver.swift; sourceTree = "<group>"; };
 		879C600EF55D80E73271783B5206E58F /* BroadcastSender.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BroadcastSender.swift; sourceTree = "<group>"; };
 		886BF7142DB09EE334F5DAB90B1CAC03 /* MD5.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
@@ -253,7 +255,7 @@
 		994B5D1D8B94C5662FC4FC92F38FC5A5 /* ActionType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		99A67367E018411D614EC8536A8A1C5B /* UIApplication+StrictKeyWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIApplication+StrictKeyWindow.h"; path = "FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.h"; sourceTree = "<group>"; };
 		9BB179F60ED21C17011318733738F8C2 /* ActionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionManager.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E88054CAE59615A25426CBCBBC245DC /* GroupAlertBehaviour.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GroupAlertBehaviour.swift; sourceTree = "<group>"; };
 		9EDCF9005818ED49F8BB1AFF8CA35E20 /* Pods-IosAwnCore_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-IosAwnCore_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		A3567AD95369944495DC6C12E6FB6A30 /* AwesomeNotificationsExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AwesomeNotificationsExtension.swift; path = IosAwnCore/Classes/AwesomeNotificationsExtension.swift; sourceTree = "<group>"; };
@@ -291,7 +293,7 @@
 		E53C81708C30C9D5B13EE3AD7A32196B /* DateUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		E658F388F01C72599CA75537950B6095 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E7123AA4AD87C6143B27D89E12DAEE39 /* Pods-IosAwnCore_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-IosAwnCore_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		E79E6E244A1629823B35ED14E9CFC90D /* IosAwnCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = IosAwnCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E79E6E244A1629823B35ED14E9CFC90D /* IosAwnCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = IosAwnCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EB82FFFCF9EFA3F95BD23C8670D61001 /* IntUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IntUtils.swift; sourceTree = "<group>"; };
 		EDAF1CB9470075FDA2BF6865D4694F8D /* NotificationReceived.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationReceived.swift; sourceTree = "<group>"; };
 		EEF6A8123F1835AE3DAEB5C2950E6DEC /* NotificationContentModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationContentModel.swift; sourceTree = "<group>"; };
@@ -384,7 +386,6 @@
 				84442C50BFBC35538C26D72A04A39331 /* NotificationActionReceiver.swift */,
 				7A83F34AAB5C4D95230928EE4A53B68F /* RefreshSchedulesReceiver.swift */,
 			);
-			name = receivers;
 			path = receivers;
 			sourceTree = "<group>";
 		};
@@ -435,7 +436,6 @@
 			children = (
 				879C600EF55D80E73271783B5206E58F /* BroadcastSender.swift */,
 			);
-			name = senders;
 			path = senders;
 			sourceTree = "<group>";
 		};
@@ -496,7 +496,6 @@
 				0A32997B1FB08DF3D74CE6C572EFE500 /* ActionReceived.swift */,
 				EDAF1CB9470075FDA2BF6865D4694F8D /* NotificationReceived.swift */,
 			);
-			name = returnedData;
 			path = returnedData;
 			sourceTree = "<group>";
 		};
@@ -551,6 +550,7 @@
 		AD963225AD3DDB4C0DA8E287B7732FD2 /* managers */ = {
 			isa = PBXGroup;
 			children = (
+				05A96B792A126F3600F07E06 /* LostEventsManager.swift */,
 				9BB179F60ED21C17011318733738F8C2 /* ActionManager.swift */,
 				3FEE2B4A6D6221D6D6E6344FA84E93B5 /* BadgeManager.swift */,
 				A5786F7B68D19D77E471523739952497 /* CancellationManager.swift */,
@@ -659,7 +659,6 @@
 				B69B2ECE2D2C9A3924A9231138CE0BBC /* Support Files */,
 				906402ECC4C6C5EB58DD365FD2C64E92 /* SwiftSupport */,
 			);
-			name = FBSnapshotTestCase;
 			path = FBSnapshotTestCase;
 			sourceTree = "<group>";
 		};
@@ -997,6 +996,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5DBEE4C3ACF549E33A5374040AA8A37 /* AbstractModel.swift in Sources */,
+				05A96B7A2A126F3700F07E06 /* LostEventsManager.swift in Sources */,
 				0A6BBEA9E5913BF116A61E001BA3C17B /* ActionManager.swift in Sources */,
 				C04F5C757690339E1606AA694F8099C2 /* ActionReceived.swift in Sources */,
 				8426EBD3BFDC93D55E5CCA59D30303B7 /* ActionType.swift in Sources */,
@@ -1392,8 +1392,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

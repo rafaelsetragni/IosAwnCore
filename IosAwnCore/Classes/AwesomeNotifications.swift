@@ -200,6 +200,10 @@ public class AwesomeNotifications:
                             eventName: lostEvent.eventName,
                             notificationReceived: lostEvent.notificationContent)
                     }
+                    
+                    RefreshSchedulesReceiver()
+                            .refreshSchedules()
+                    
                 } catch {
                     if !(error is AwesomeNotificationsException) {
                         ExceptionFactory
@@ -514,9 +518,6 @@ public class AwesomeNotifications:
         
         UNUserNotificationCenter.current().delegate = self
         
-        RefreshSchedulesReceiver()
-                .refreshSchedules()
-        
         AwesomeNotifications.didFinishLaunch = true
         if AwesomeNotifications.completionHandlerGetInitialAction != nil {
             AwesomeNotifications
@@ -620,33 +621,46 @@ public class AwesomeNotifications:
                 .jsonDataToNotificationModel(
                     jsonData: jsonData)
         {
-            StatusBarManager
-                .shared
-                .showNotificationOnStatusBar(
-                    withNotificationModel: notificationModel,
-                    whenFinished: { (notificationDisplayed:Bool, mustPlaySound:Bool) in
-                        
-                        if !notificationDisplayed && self._originalNotificationCenterDelegate != nil {
-                            self._originalNotificationCenterDelegate?
-                                .userNotificationCenter?(
-                                    center,
-                                    willPresent: notification,
-                                    withCompletionHandler: completionHandler)
-                        }
-                        else {
-                            if notificationDisplayed {
-                                if mustPlaySound {
-                                    completionHandler([.alert, .badge, .sound])
-                                }
-                                else {
-                                    completionHandler([.alert, .badge])
-                                }
+            do {
+                try StatusBarManager
+                    .shared
+                    .showNotificationOnStatusBar(
+                        withNotificationModel: notificationModel,
+                        whenFinished: { (notificationDisplayed:Bool, mustPlaySound:Bool) in
+                            
+                            if !notificationDisplayed && self._originalNotificationCenterDelegate != nil {
+                                self._originalNotificationCenterDelegate?
+                                    .userNotificationCenter?(
+                                        center,
+                                        willPresent: notification,
+                                        withCompletionHandler: completionHandler)
                             }
                             else {
-                                completionHandler([])
+                                if notificationDisplayed {
+                                    if mustPlaySound {
+                                        completionHandler([.alert, .badge, .sound])
+                                    }
+                                    else {
+                                        completionHandler([.alert, .badge])
+                                    }
+                                }
+                                else {
+                                    completionHandler([])
+                                }
                             }
-                        }
-                    })
+                        })
+            } catch {
+                if !(error is AwesomeNotificationsException) {
+                    ExceptionFactory
+                        .shared
+                        .registerNewAwesomeException(
+                            className: TAG,
+                            code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            message: "An unknow exception was found while displaying a notification on Statusbar",
+                            detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR,
+                            originalException: error)
+                }
+            }
             
         }
         else {
