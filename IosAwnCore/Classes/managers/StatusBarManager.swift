@@ -75,7 +75,7 @@ public class StatusBarManager {
     public func showNotificationOnStatusBar(
         withNotificationModel notificationModel: NotificationModel,
         whenFinished completionHandler: @escaping (Bool, Bool) -> Void
-    ) {
+    ) throws {
         
         /*
         if(content.userInfo["updated"] == nil){
@@ -105,22 +105,22 @@ public class StatusBarManager {
         }
         */
     
-        let notificationReceived:NotificationReceived? = NotificationReceived(notificationModel.content)
-        if(notificationReceived != nil){
-            
-            notificationModel.content!.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
-            
-            let channel:NotificationChannelModel? =
-                ChannelManager
-                .shared
-                .getChannelByKey(channelKey: notificationModel.content!.channelKey!)
-            
-            alertOnlyOnceNotification(
-                channel?.onlyAlertOnce,
-                notificationReceived: notificationReceived!,
-                completionHandler: completionHandler
-            )
-        }
+        let notificationReceived = NotificationReceived(notificationModel.content)
+        try notificationReceived.validate()
+        
+        notificationReceived.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
+        
+        guard let channel:NotificationChannelModel =
+            ChannelManager
+            .shared
+            .getChannelByKey(channelKey: notificationReceived.channelKey ?? "")
+        else { return }
+        
+        alertOnlyOnceNotification(
+            channel.onlyAlertOnce,
+            notificationReceived: notificationReceived,
+            completionHandler: completionHandler
+        )
     }
         
     @available(iOS 10.0, *)

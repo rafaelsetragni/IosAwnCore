@@ -131,20 +131,24 @@ public class NotificationActionReceiver {
             }
         }
         
-        if !userInfo.isEmpty && notificationModel!.content!.payload == nil {
-            notificationModel!.content!.payload = [:]
-        }
-        for (key, value) in userInfo {
-            guard let key:String = key as? String
-            else { continue }
-            if key == Definitions.NOTIFICATION_JSON { continue }
-            if key == Definitions.NOTIFICATION_MODEL_CONTENT { continue }
-            if key == Definitions.NOTIFICATION_MODEL_BUTTONS { continue }
-            if key == Definitions.NOTIFICATION_MODEL_SCHEDULE { continue }
-            if key == Definitions.NOTIFICATION_MODEL_ANDROID { continue }
-            if key == Definitions.NOTIFICATION_MODEL_IOS { continue }
-            
-            notificationModel!.content!.payload![key] = value as? String
+        if notificationModel!.content!.createdSource != .Local {
+            if !userInfo.isEmpty && notificationModel!.content!.payload == nil {
+                notificationModel!.content!.payload = [:]
+            }
+            for (key, value) in userInfo {
+                guard let key:String = key as? String
+                else { continue }
+                if key == Definitions.NOTIFICATION_JSON { continue }
+                if key == Definitions.NOTIFICATION_MODEL_CONTENT { continue }
+                if key == Definitions.NOTIFICATION_MODEL_BUTTONS { continue }
+                if key == Definitions.NOTIFICATION_MODEL_SCHEDULE { continue }
+                if key == Definitions.NOTIFICATION_MODEL_ANDROID { continue }
+                if key == Definitions.NOTIFICATION_MODEL_IOS { continue }
+                if key == Definitions.NOTIFICATION_ID { continue }
+                if key == Definitions.NOTIFICATION_CHANNEL_KEY { continue }
+                
+                notificationModel!.content!.payload![key] = value as? String
+            }
         }
             
         guard let actionReceived:ActionReceived =
