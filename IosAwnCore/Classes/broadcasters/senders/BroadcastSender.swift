@@ -71,7 +71,7 @@ class BroadcastSender {
     ){
         if !ActionManager.shared.recovered { //LifeCycleManager.shared.currentLifeCycle == .AppKilled
             ActionManager.shared.saveAction(received: actionReceived)
-            Logger.d(TAG, "action saved")
+            Logger.shared.d(TAG, "action saved")
         }
         else {
             AwesomeEventsReceiver
@@ -79,7 +79,7 @@ class BroadcastSender {
                 .addActionEvent(
                     named: Definitions.BROADCAST_DEFAULT_ACTION,
                     with: actionReceived)
-            Logger.d(TAG, "action broadcasted")
+            Logger.shared.d(TAG, "action broadcasted")
         }
         
         completionHandler(true, nil)

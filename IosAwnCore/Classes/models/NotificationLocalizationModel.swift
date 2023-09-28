@@ -38,7 +38,7 @@ public class NotificationLocalizationModel : AbstractModel {
             self.buttonLabels = MapUtils<[String:String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_LABELS, arguments: arguments)
         }
         catch {
-            Logger.e(Self.TAG, error.localizedDescription)
+            Logger.shared.e(Self.TAG, error.localizedDescription)
             return nil
         }
     }

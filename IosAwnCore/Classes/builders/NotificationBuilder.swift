@@ -165,7 +165,7 @@ public class NotificationBuilder {
         var previousCategories:[UNNotificationCategory] = []
         previousCategories.append(contentsOf: [category])
         UNUserNotificationCenter.current().setNotificationCategories(Set(previousCategories))            
-        Logger.d(TAG, "Notification Category Identifier: \(category.identifier)")
+        Logger.shared.d(TAG, "Notification Category Identifier: \(category.identifier)")
         
         if(notificationModel.schedule != nil){
             
@@ -618,7 +618,7 @@ public class NotificationBuilder {
                     return imageAttachment
                     
                 } catch {
-                    Logger.e(TAG, error.localizedDescription)
+                    Logger.shared.e(TAG, error.localizedDescription)
                 }
             }
         }
@@ -658,22 +658,22 @@ public class NotificationBuilder {
     
     private func setProgressBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "ProgressBar"
-        Logger.w(TAG, "ProgressBar layout are not available yet for iOS")
+        Logger.shared.w(TAG, "ProgressBar layout are not available yet for iOS")
     }
     
     private func setIndeterminateBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "IndeterminateBar"
-        Logger.w(TAG, "IndeterminateBar layout are not available yet for iOS")
+        Logger.shared.w(TAG, "IndeterminateBar layout are not available yet for iOS")
     }
     
     private func setMediaPlayerLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "MediaPlayer"
-        Logger.w(TAG, "MediaPlayer layout are not available yet for iOS")
+        Logger.shared.w(TAG, "MediaPlayer layout are not available yet for iOS")
     }
     
     private func setInboxLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Inbox"
-        Logger.w(TAG, "Imbox layout are not available yet for iOS")
+        Logger.shared.w(TAG, "Imbox layout are not available yet for iOS")
     }
     
     private func setMessagingLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent, isGrouping:Bool) {

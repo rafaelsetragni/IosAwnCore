@@ -35,7 +35,7 @@ public class NotificationModel : AbstractModel {
             self.localizations = extractLocalizations(Definitions.NOTIFICATION_MODEL_LOCALIZATIONS, arguments)
         }
         catch {
-            Logger.e("NotificationModel", error.localizedDescription)
+            Logger.shared.e("NotificationModel", error.localizedDescription)
             return nil
         }
     }

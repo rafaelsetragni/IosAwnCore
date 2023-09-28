@@ -27,7 +27,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
             AwesomeNotifications.initialize()
             
             if(!StringUtils.shared.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
-                Logger.d(TAG, "New push notification received")
+                Logger.shared.d(TAG, "New push notification received")
                 
                 let title:String? = content.title
                 let body:String?  = content.body
@@ -38,7 +38,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                 }
                 
                 if content.userInfo[Definitions.NOTIFICATION_MODEL_CONTENT] == nil {
-                    Logger.d(TAG, "Notification translated to awesome content")
+                    Logger.shared.d(TAG, "Notification translated to awesome content")
                     
                     notificationModel = NotificationModel()
                     notificationModel!.content = NotificationContentModel()

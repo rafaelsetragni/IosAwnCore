@@ -100,7 +100,7 @@ public class AwesomeNotifications:
             .subscribeOnNotificationEvents(listener: self)
             .subscribeOnActionEvents(listener: self)
         
-        Logger.d(TAG, "Awesome notifications \(self.hash) attached to app instance");
+        Logger.shared.d(TAG, "Awesome notifications \(self.hash) attached to app instance")
     }
     
     public func detachAsMainInstance(listener: AwesomeEventListener){
@@ -117,7 +117,7 @@ public class AwesomeNotifications:
             .unsubscribeOnNotificationEvents(listener: self)
             .unsubscribeOnActionEvents(listener: self)
         
-        Logger.d(TAG, "Awesome notifications \(self.hash) detached from app instance");
+        Logger.shared.d(TAG, "Awesome notifications \(self.hash) detached from app instance")
     }
     
     public func dispose(){
@@ -394,7 +394,7 @@ public class AwesomeNotifications:
         AwesomeNotifications.debug = debug
         
         if(AwesomeNotifications.debug){
-            Logger.d(TAG, "Awesome Notifications initialized")
+            Logger.shared.d(TAG, "Awesome Notifications initialized")
         }
     }
     
@@ -473,7 +473,7 @@ public class AwesomeNotifications:
                     id: displayedNotification.id!,
                     displayedDate: displayedNotification.displayedDate!)
             {
-                Logger.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
+                Logger.shared.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
             }
         }
         
@@ -528,7 +528,7 @@ public class AwesomeNotifications:
         
             
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "Awesome Notifications attached for iOS")
+            Logger.shared.d(TAG, "Awesome Notifications attached for iOS")
         }
     }
     
@@ -538,7 +538,7 @@ public class AwesomeNotifications:
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ){
-        Logger.d(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
+        Logger.shared.d(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
         do {
             switch response.actionIdentifier {
             
@@ -843,7 +843,7 @@ public class AwesomeNotifications:
                     .dismissNotification(byId: id)
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "Notification id \(id) dismissed")
+            Logger.shared.d(TAG, "Notification id \(id) dismissed")
         }
         
         return success
