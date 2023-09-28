@@ -407,7 +407,7 @@ public class PermissionManager {
                             if permissionsRequested.contains(NotificationPermission.CriticalAlert.rawValue) ||
                                 permissionsRequested.contains(NotificationPermission.OverrideDnD.rawValue){
                                 if(settings.criticalAlertSetting == .notSupported){
-                                    Logger.e(self.TAG,
+                                    Logger.shared.e(self.TAG,
                                         "Critical Alerts are not available for this project. " +
                                         "You must require Apple special permissions to use it. " +
                                         "For more informations, please read our official documentation.")
@@ -500,7 +500,7 @@ public class PermissionManager {
         UNUserNotificationCenter.current().requestAuthorization(options: iOSpermissions) { (granted, error) in
 
             if granted {
-                Logger.d("PermissionManager", "Permissions enabled successfully")
+                Logger.shared.d("PermissionManager", "Permissions enabled successfully")
 
                 self.refreshReturnedPermissions(
                     permissionsNeeded,

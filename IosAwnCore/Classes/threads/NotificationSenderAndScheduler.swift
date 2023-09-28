@@ -273,7 +273,7 @@ public class NotificationSenderAndScheduler {
         let endTime = DispatchTime.now()
         let nanoTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
         let timeInterval:Double = Double(nanoTime) / 1_000_000
-        Logger.d(
+        Logger.shared.d(
             BackgroundService.TAG,
             "Notification \(scheduled ? "scheduled" : "displayed") in \(timeInterval.rounded())ms")
     }

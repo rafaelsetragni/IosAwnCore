@@ -38,23 +38,17 @@ public class ActionReceived : NotificationReceived {
     public convenience init?(fromMap arguments: [String : Any?]?){
         if arguments?.isEmpty ?? true { return nil }
         
-        do {
-            guard let contentModel = NotificationReceived(fromMap: arguments) else { return nil }
-            self.init(contentModel)
-            
-            self.buttonKeyPressed = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, arguments: arguments)
-            self.buttonKeyInput   = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_INPUT, arguments: arguments)
-            
-            self.actionDate       = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_ACTION_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
-            self.dismissedDate    = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
-            
-            self.actionLifeCycle  = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_ACTION_LIFECYCLE, arguments: arguments)
-            self.dismissedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, arguments: arguments)
-        }
-        catch {
-            Logger.e(Self.TAG, error.localizedDescription)
-            return nil
-        }
+        guard let contentModel = NotificationReceived(fromMap: arguments) else { return nil }
+        self.init(contentModel)
+        
+        self.buttonKeyPressed = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, arguments: arguments)
+        self.buttonKeyInput   = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_INPUT, arguments: arguments)
+        
+        self.actionDate       = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_ACTION_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        self.dismissedDate    = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        
+        self.actionLifeCycle  = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_ACTION_LIFECYCLE, arguments: arguments)
+        self.dismissedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, arguments: arguments)
     }
     
     override public func toMap() -> [String : Any?] {
