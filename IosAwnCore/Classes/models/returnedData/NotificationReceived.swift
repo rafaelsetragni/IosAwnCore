@@ -27,7 +27,6 @@ public class NotificationReceived : NotificationContentModel {
         self.body = contentModel!.body
         self.summary = contentModel!.summary
         self.showWhen = contentModel!.showWhen
-        self.actionButtons = contentModel!.actionButtons
         self.payload = contentModel!.payload
         self.largeIcon = contentModel!.largeIcon
         self.bigPicture = contentModel!.bigPicture

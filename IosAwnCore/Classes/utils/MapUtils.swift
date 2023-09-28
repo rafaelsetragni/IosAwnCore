@@ -80,15 +80,13 @@ public class MapUtils<T: Any> {
     }
     
     public static func deepMerge(_ originalMap:[String:Any?], _ newMap:[String:Any?]) -> [String:Any?]{
-        var result = [String:Any?]()
-        for (k1,v1) in originalMap {
-            result[k1] = v1
-        }
-        for (k2,v2) in newMap {
-            if v2 is [String:Any?], let v1 = result[k2], v1 is [String:Any?] {
-                result[k2] = deepMerge(v1 as! [String:Any?],v2 as! [String:Any?])
+        var result = originalMap
+        for (key, newValue) in newMap {
+            if let newValue = newValue as? [String: Any?],
+               let existingValue = result[key] as? [String: Any?] {
+                result[key] = deepMerge(existingValue, newValue)
             } else {
-                result[k2] = v2
+                result[key] = newValue
             }
         }
         return result

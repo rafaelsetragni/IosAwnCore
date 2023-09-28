@@ -87,7 +87,7 @@ public class NotificationChannelModel : AbstractModel {
             self.defaultRingtoneType = EnumUtils<DefaultRingtoneType>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, arguments: arguments)
         }
         catch {
-            Logger.e(Self.TAG, error.localizedDescription)
+            Logger.shared.e(Self.TAG, error.localizedDescription)
             return nil
         }
     }

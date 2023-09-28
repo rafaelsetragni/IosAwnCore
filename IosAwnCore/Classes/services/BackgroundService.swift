@@ -30,13 +30,13 @@ class BackgroundService {
         withCompletionHandler completionHandler: @escaping (Bool, Error?) -> ()
     ){
         let start = DispatchTime.now()
-        Logger.d(BackgroundService.TAG, "A new Dart background service has started")
+        Logger.shared.d(BackgroundService.TAG, "A new Dart background service has started")
         
         let completionWithTimer:(Bool, Error?) -> () = { (success, error) in
             let end = DispatchTime.now()
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
             let timeInterval:Double = Double(nanoTime) / 1_000_000
-            Logger.d(BackgroundService.TAG, "Background action finished in \(timeInterval.rounded())ms")
+            Logger.shared.d(BackgroundService.TAG, "Background action finished in \(timeInterval.rounded())ms")
             
             completionHandler(success, error)
         }

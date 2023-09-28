@@ -31,7 +31,7 @@ public class AwesomeEventsReceiver {
         notificationEventListeners.append(listener)
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, String(describing: listener) + " subscribed to receive notification events")
+            Logger.shared.d(TAG, String(describing: listener) + " subscribed to receive notification events")
         }
         return self
     }
@@ -40,7 +40,7 @@ public class AwesomeEventsReceiver {
         if let index = notificationEventListeners.firstIndex(where: {$0 === listener}) {
             notificationEventListeners.remove(at: index)
             if AwesomeNotifications.debug {
-                Logger.d(TAG, String(describing: listener) + " unsubscribed from notification events")
+                Logger.shared.d(TAG, String(describing: listener) + " unsubscribed from notification events")
             }
         }
         return self
@@ -51,7 +51,7 @@ public class AwesomeEventsReceiver {
         with notificationReceived: NotificationReceived
     ){
         if AwesomeNotifications.debug && actionEventListeners.isEmpty {
-            Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
+            Logger.shared.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
         }
         
         for listener in notificationEventListeners {
@@ -70,7 +70,7 @@ public class AwesomeEventsReceiver {
         actionEventListeners.append(listener)
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, String(describing: listener) + " subscribed to receive action events")
+            Logger.shared.d(TAG, String(describing: listener) + " subscribed to receive action events")
         }
     }
     
@@ -78,7 +78,7 @@ public class AwesomeEventsReceiver {
         if let index = actionEventListeners.firstIndex(where: {$0 === listener}) {
             actionEventListeners.remove(at: index)
             if AwesomeNotifications.debug {
-                Logger.d(TAG, String(describing: listener) + " unsubscribed from action events")
+                Logger.shared.d(TAG, String(describing: listener) + " unsubscribed from action events")
             }
         }
     }
@@ -88,7 +88,7 @@ public class AwesomeEventsReceiver {
         with actionReceived: ActionReceived
     ){
         if AwesomeNotifications.debug && actionEventListeners.isEmpty {
-            Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
+            Logger.shared.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
         }
         
         var interrupted:Bool = false
@@ -118,7 +118,7 @@ public class AwesomeEventsReceiver {
     ){
         if notificationEventListeners.isEmpty {
             if AwesomeNotifications.debug {
-                Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
+                Logger.shared.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
             }
             return
         }
@@ -136,11 +136,11 @@ public class AwesomeEventsReceiver {
                     
                 default:
                     if AwesomeNotifications.debug {
-                        Logger.d(TAG, "Received unknown notification event: '\(eventName)'")
+                        Logger.shared.d(TAG, "Received unknown notification event: '\(eventName)'")
                     }
             }
         } catch {
-            Logger.e(TAG, error.localizedDescription)
+            Logger.shared.e(TAG, error.localizedDescription)
         }
     }
     
@@ -150,7 +150,7 @@ public class AwesomeEventsReceiver {
     ){
         if notificationEventListeners.isEmpty {
             if AwesomeNotifications.debug {
-                Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
+                Logger.shared.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
             }
             return
         }
@@ -176,12 +176,12 @@ public class AwesomeEventsReceiver {
                     
                 default:
                     if AwesomeNotifications.debug {
-                        Logger.d(TAG, "Received unknown notification event: '\(eventName)'")
+                        Logger.shared.d(TAG, "Received unknown notification event: '\(eventName)'")
                     }
             }
         }
         catch {
-            Logger.e(TAG, error.localizedDescription)
+            Logger.shared.e(TAG, error.localizedDescription)
         }
     }
     
@@ -189,7 +189,7 @@ public class AwesomeEventsReceiver {
         try notificationReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New notification creation event")
+            Logger.shared.d(TAG, "New notification creation event")
         }
         
         notifyNotificationEvent(
@@ -201,7 +201,7 @@ public class AwesomeEventsReceiver {
         try notificationReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New notification display event")
+            Logger.shared.d(TAG, "New notification display event")
         }
         
         notifyNotificationEvent(
@@ -213,7 +213,7 @@ public class AwesomeEventsReceiver {
         try actionReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New notification action event")
+            Logger.shared.d(TAG, "New notification action event")
         }
         
         notifyActionEvent(
@@ -225,7 +225,7 @@ public class AwesomeEventsReceiver {
         try actionReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New notification dismiss event")
+            Logger.shared.d(TAG, "New notification dismiss event")
         }
         
         notifyActionEvent(
@@ -237,7 +237,7 @@ public class AwesomeEventsReceiver {
         try actionReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New silent action event")
+            Logger.shared.d(TAG, "New silent action event")
         }
         
         notifyActionEvent(
@@ -249,7 +249,7 @@ public class AwesomeEventsReceiver {
         try actionReceived.validate()
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "New background silent action event")
+            Logger.shared.d(TAG, "New background silent action event")
         }
         
         notifyActionEvent(

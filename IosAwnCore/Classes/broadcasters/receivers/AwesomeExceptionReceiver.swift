@@ -32,7 +32,7 @@ public class AwesomeExceptionReceiver  {
         eventListeners.append(listener)
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, String(describing: listener) + " subscribed to receive exception events")
+            Logger.shared.d(TAG, String(describing: listener) + " subscribed to receive exception events")
         }
         return self
     }
@@ -41,7 +41,7 @@ public class AwesomeExceptionReceiver  {
         if let index = eventListeners.firstIndex(where: {$0 === listener}) {
             eventListeners.remove(at: index)
             if AwesomeNotifications.debug {
-                Logger.d(TAG, String(describing: listener) + " unsubscribed from exception events")
+                Logger.shared.d(TAG, String(describing: listener) + " unsubscribed from exception events")
             }
         }
         return self
@@ -51,7 +51,7 @@ public class AwesomeExceptionReceiver  {
         fromClassName className:String,
         withAwesomeException awesomeException:AwesomeNotificationsException
     ){
-        Logger.e(TAG, awesomeException.message)
+        Logger.shared.e(TAG, awesomeException.message)
         for listener in eventListeners {
             listener.onNewAwesomeException(
                 fromClassName: className,
