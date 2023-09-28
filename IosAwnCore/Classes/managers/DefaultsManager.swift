@@ -77,7 +77,7 @@ public class DefaultsManager {
                 return RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
             }
             
-            Logger.d(TAG, "last displayed date recovered: \(dateText)")
+            Logger.shared.d(TAG, "last displayed date recovered: \(dateText)")
             guard let lastDate:RealDateTime =
                                     RealDateTime.init(
                                         fromDateText: dateText,
@@ -96,13 +96,13 @@ public class DefaultsManager {
         userDefaults.setValue(
             nowDate,
             forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE)
-        Logger.d(TAG, "last displayed date registered: \(nowDate)")
+        Logger.shared.d(TAG, "last displayed date registered: \(nowDate)")
     }
     
     public func checkIfAppGroupConnected() {
         let valueRestored:String? = userDefaults.object(forKey: Definitions.TEST_APP_GROUP) as? String
         if valueRestored?.isEmpty ?? true {
-            Logger.e(TAG, "App Groups are not successfully connected. Please, use '\(Definitions.USER_DEFAULT_TAG)' group name in your App Groups Capabilities.")
+            Logger.shared.e(TAG, "App Groups are not successfully connected. Please, use '\(Definitions.USER_DEFAULT_TAG)' group name in your App Groups Capabilities.")
         }
     }
 }

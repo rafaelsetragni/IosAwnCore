@@ -151,11 +151,11 @@ public class ScheduleManager : EventManager {
                 }
                 try completionHandler(schedules)
             } catch {
-                Logger.e("syncAllPendingSchedules", error.localizedDescription)
+                Logger.shared.e("syncAllPendingSchedules", error.localizedDescription)
                 do {
                     try completionHandler([])
                 } catch {
-                    Logger.e("syncAllPendingSchedules", error.localizedDescription)
+                    Logger.shared.e("syncAllPendingSchedules", error.localizedDescription)
                 }
             }
         })
