@@ -107,7 +107,7 @@ public class LostEventsManager {
                     ))
                     
                 } catch {
-                    Logger.e(TAG, "Created event \(String(describing: createdNotification.id)) failed to recover: \(error)")
+                    Logger.shared.e(TAG, "Created event \(String(describing: createdNotification.id)) failed to recover: \(error)")
                 }
                 
                 if !CreatedManager
@@ -116,7 +116,7 @@ public class LostEventsManager {
                         id: createdNotification.id!,
                         createdDate: createdNotification.createdDate!)
                 {
-                    Logger.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
+                    Logger.shared.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
                 }
             }
         }
@@ -173,7 +173,7 @@ public class LostEventsManager {
                             notificationContent: displayedNotification
                         ))
                     } catch {
-                        Logger.e(TAG, "Displayed event \(String(describing: displayedNotification.id)) failed to recover: \(error)")
+                        Logger.shared.e(TAG, "Displayed event \(String(describing: displayedNotification.id)) failed to recover: \(error)")
                     }
                 }
                 
@@ -183,7 +183,7 @@ public class LostEventsManager {
                         id: displayedNotification.id!,
                         displayedDate: displayedNotification.displayedDate!)
                 {
-                    Logger.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
+                    Logger.shared.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
                 }
             }
             
@@ -230,14 +230,14 @@ public class LostEventsManager {
                     ))
                     
                 } catch {
-                    Logger.e(TAG, "Dismissed event \(String(describing: dismissedNotification.id)) failed to recover: \(error)")
+                    Logger.shared.e(TAG, "Dismissed event \(String(describing: dismissedNotification.id)) failed to recover: \(error)")
                 }
                 
                 if !DismissedManager
                     .shared
                     .removeDismissed(id: dismissedNotification.id!)
                 {
-                    Logger.e(TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
+                    Logger.shared.e(TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
                 }
             }
         }
@@ -274,11 +274,11 @@ public class LostEventsManager {
                     ))
                     
                 } catch {
-                    Logger.e(TAG, "Action event \(String(describing: notificationAction.id)) failed to recover: \(error)")
+                    Logger.shared.e(TAG, "Action event \(String(describing: notificationAction.id)) failed to recover: \(error)")
                 }
                 
                 if !ActionManager.shared.removeAction(id: notificationAction.id!) {
-                    Logger.e(TAG, "Action event \(notificationAction.id!) could not be cleaned")
+                    Logger.shared.e(TAG, "Action event \(notificationAction.id!) could not be cleaned")
                 }
             }
         }

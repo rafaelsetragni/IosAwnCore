@@ -46,7 +46,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
             self.repeats  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
         }
         catch {
-            Logger.e(Self.TAG, error.localizedDescription)
+            Logger.shared.e(Self.TAG, error.localizedDescription)
             return nil
         }
     }
@@ -94,7 +94,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
             return trigger
             
         } catch {
-            Logger.e("NotificationIntervalModel", error.localizedDescription)
+            Logger.shared.e("NotificationIntervalModel", error.localizedDescription)
         }
         return nil
     }

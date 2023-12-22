@@ -87,7 +87,7 @@ open class AudioUtils: MediaUtils {
                 return UNNotificationSound.default
                 
             //} catch let error {
-            //    Logger.e("AudioUtils", error)
+            //    Logger.shared.e("AudioUtils", error)
             //}
         }
 
@@ -129,7 +129,7 @@ open class AudioUtils: MediaUtils {
             return nil
           /*
         } catch let error {
-            Logger.e("AudioUtils", error)
+            Logger.shared.e("AudioUtils", error)
             return nil
         }*/
     }

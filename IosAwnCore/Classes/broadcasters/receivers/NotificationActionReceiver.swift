@@ -212,7 +212,7 @@ public class NotificationActionReceiver {
 //                                    .mimicPersistentNotification(
 //                                        notificationModel: notificationModel)
 //                        } catch {
-//                            Logger.e(self.TAG, "\(error)")
+//                            Logger.shared.e(self.TAG, "\(error)")
 //                        }
 //                    }
 //            }

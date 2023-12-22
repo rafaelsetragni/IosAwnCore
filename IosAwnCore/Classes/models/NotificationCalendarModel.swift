@@ -90,7 +90,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             }
         }
         catch {
-            Logger.e(Self.TAG, error.localizedDescription)
+            Logger.shared.e(Self.TAG, error.localizedDescription)
             return nil
         }
     }
@@ -242,7 +242,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             return trigger
             
         } catch {
-            Logger.e("NotificationCallendarModel", error.localizedDescription)
+            Logger.shared.e("NotificationCallendarModel", error.localizedDescription)
         }
         return nil
     }
