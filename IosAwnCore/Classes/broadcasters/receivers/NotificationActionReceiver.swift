@@ -27,12 +27,13 @@ public class NotificationActionReceiver {
     
     public func addNewActionEvent(
         fromResponse response: UNNotificationResponse,
+        buttonKeyPressed: String?,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ) throws {
      
         var userText:String?
         if let textResponse = response as? UNTextInputNotificationResponse {
-            userText =  textResponse.userText
+            userText = textResponse.userText
         }
         
         var notificationModel:NotificationModel? = nil
@@ -42,6 +43,13 @@ public class NotificationActionReceiver {
                 .request
                 .content
                 .userInfo
+        
+        
+        
+        let requiredActions = userInfo[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] as? String ?? "";
+        let isAuthenticationRequired = buttonKeyPressed == nil
+                ? false
+                : requiredActions.matches("\\b\(buttonKeyPressed!)\\b")
         
         if let jsonData:String = userInfo[Definitions.NOTIFICATION_JSON] as? String
         {
@@ -156,9 +164,8 @@ public class NotificationActionReceiver {
                     .newInstance()
                     .buildNotificationActionFromModel(
                         notificationModel: notificationModel,
-                        buttonKeyPressed:
-                            response.actionIdentifier == UNNotificationDefaultActionIdentifier.description ?
-                            "" : response.actionIdentifier,
+                        buttonKeyPressed: buttonKeyPressed,
+                        isAuthenticationRequired: isAuthenticationRequired,
                         userText: userText)
         else {
             throw ExceptionFactory

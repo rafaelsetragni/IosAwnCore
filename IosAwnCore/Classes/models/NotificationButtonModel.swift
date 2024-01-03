@@ -20,6 +20,7 @@ public class NotificationButtonModel : AbstractModel {
     var autoDismissible:Bool?
     var showInCompactView:Bool?
     var isDangerousOption:Bool?
+    var isAuthenticationRequired:Bool?
     var actionType:ActionType?
     
     public init(){}
@@ -43,6 +44,7 @@ public class NotificationButtonModel : AbstractModel {
             self.requireInputText  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT, arguments: arguments)
             self.showInCompactView = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, arguments: arguments)
             self.isDangerousOption = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, arguments: arguments)
+            self.isAuthenticationRequired = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED, arguments: arguments)
         }
         catch {
             Logger.shared.e(Self.TAG, error.localizedDescription)
@@ -65,6 +67,7 @@ public class NotificationButtonModel : AbstractModel {
         if(requireInputText != nil) {mapData[Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT] = self.requireInputText}
         if(showInCompactView != nil) {mapData[Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW] = self.showInCompactView}
         if(isDangerousOption != nil) {mapData[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION] = self.isDangerousOption}
+        if(isAuthenticationRequired != nil) {mapData[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] = self.isAuthenticationRequired}
         
         return mapData
     }

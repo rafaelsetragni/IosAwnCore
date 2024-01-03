@@ -192,6 +192,7 @@ public enum Definitions {
     public static let  NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText"
     public static let  NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView"
     public static let  NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
+    public static let  NOTIFICATION_AUTHENTICATION_REQUIRED = "isAuthenticationRequired"
     public static let  NOTIFICATION_PERMISSIONS = "permissions"
 
     public static let  NOTIFICATION_PAYLOAD = "payload"

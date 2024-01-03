@@ -37,6 +37,7 @@ public class NotificationBuilder {
     public func buildNotificationActionFromModel(
         notificationModel:NotificationModel?,
         buttonKeyPressed:String?,
+        isAuthenticationRequired:Bool,
         userText:String?
     ) -> ActionReceived? {
         if notificationModel == nil { return nil }
@@ -44,7 +45,9 @@ public class NotificationBuilder {
         let actionReceived:ActionReceived = ActionReceived(
             notificationModel!.content,
             buttonKeyPressed: buttonKeyPressed,
-            buttonKeyInput: userText)
+            buttonKeyInput: userText,
+            isAuthenticationRequired: isAuthenticationRequired
+        )
         
         if notificationModel!.actionButtons != nil && !StringUtils.shared.isNullOrEmpty(buttonKeyPressed) {
             for button:NotificationButtonModel in notificationModel!.actionButtons! {
@@ -155,7 +158,8 @@ public class NotificationBuilder {
         setWakeUpScreen(notificationModel: notificationModel, content: content)
         setCriticalAlert(channel: channel, content: content)
         
-        setUserInfoContent(notificationModel: notificationModel, content: content)
+        let requiredActions = listRequiredActions(notificationModel: notificationModel)
+        setUserInfoContent(notificationModel: notificationModel, requiredActions: requiredActions, content: content)
         
         notificationModel.nextValidDate = nextDate
         
@@ -179,6 +183,12 @@ public class NotificationBuilder {
             } else {
                 _ = ScheduleManager.shared.removeSchedule(id: notificationModel.content!.id!)
             }
+        }
+        
+        if SwiftUtils.isRunningOnExtension(), let id = notificationModel.content?.id {
+            _ = CancellationManager
+                .shared
+                .dismissNotification(byId: id)
         }
         
         completion(notificationModel)
@@ -214,12 +224,13 @@ public class NotificationBuilder {
         return content
     }
     
-    public func setUserInfoContent(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
+    public func setUserInfoContent(notificationModel:NotificationModel, requiredActions:String, content:UNMutableNotificationContent) {
         
         let pushData = notificationModel.toMap()
         let jsonData = JsonUtils.toJson(pushData)
         
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
+        content.userInfo[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] = requiredActions
         content.userInfo[Definitions.NOTIFICATION_ID] = notificationModel.content!.id!
         content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = notificationModel.content!.channelKey!
         content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = notificationModel.content!.groupKey
@@ -344,6 +355,8 @@ public class NotificationBuilder {
         
         if(notificationModel.actionButtons != nil){
             for button in notificationModel.actionButtons! {
+                guard let key = button.key, let label = button.label 
+                else { continue }
                 
                 let action:UNNotificationAction?
                 var options:UNNotificationActionOptions = []
@@ -356,13 +369,17 @@ public class NotificationBuilder {
                     options.update(with: .destructive)
                 }
                 
+                if button.isAuthenticationRequired ?? false {
+                    options.update(with: .authenticationRequired)
+                }
+                
                 if button.requireInputText ?? false {
                     action = UNTextInputNotificationAction(
                         identifier:
                             button.actionType == .DismissAction
                                     ? UNNotificationDismissActionIdentifier.description
-                                    : button.key!,
-                        title: button.label!,
+                                    : key,
+                        title: label,
                         options: options
                     )
                 }
@@ -371,13 +388,13 @@ public class NotificationBuilder {
                         identifier:
                             button.actionType == .DismissAction
                                     ? UNNotificationDismissActionIdentifier.description
-                                    : button.key!,
-                        title: button.label!,
+                                    : key,
+                        title: label,
                         options: options
                     )
                 }
                 
-                dynamicCategory.append("\(button.key ?? "")(\(button.label ?? ""))")
+                dynamicCategory.append("\(key)(\(label))")
                 actions.append(action!)
             }
         }
@@ -391,6 +408,21 @@ public class NotificationBuilder {
             intentIdentifiers: [],
             options: .customDismissAction
         )
+    }
+    
+    private func listRequiredActions(notificationModel:NotificationModel) -> String {
+        guard let actionButtons = notificationModel.actionButtons else { return "" }
+        var requiredActions:[String] = []
+        
+        for button in actionButtons {
+            guard let key = button.key, let label = button.label
+            else { continue }
+            
+            if button.isAuthenticationRequired ?? false {
+                requiredActions.append(key)
+            }
+        }
+        return requiredActions.joined(separator: ",").uppercased()
     }
     
     private func getNextScheduleDate(notificationModel:NotificationModel?) -> RealDateTime? {
