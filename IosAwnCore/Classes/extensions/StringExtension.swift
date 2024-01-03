@@ -120,12 +120,23 @@ extension String {
         return modifiedString.components(separatedBy: stop)
     }
     
-    func localized(forLanguageCode languageCode: String) -> String {
-        guard let path = Bundle.main.path(forResource: formatLanguageCode(languageCode), ofType: "lproj"),
-              let bundle = Bundle(path: path) else {
-            return self // Return the original string if no localization is found
+    func localized(forLanguageCode languageCode: String) -> String? {
+        let formattedLanguageCode = formatLanguageCode(languageCode)
+
+        // Try with the full language code first (e.g., "en-US")
+        if let path = Bundle.main.path(forResource: formattedLanguageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            return NSLocalizedString(self, bundle: bundle, comment: "")
         }
-        return NSLocalizedString(self, bundle: bundle, comment: "")
+
+        // If not found, try with only the language part (e.g., "en")
+        let primaryLanguageCode = onlyFirstLanguageCode(formattedLanguageCode)
+        if let path = Bundle.main.path(forResource: primaryLanguageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            return NSLocalizedString(self, bundle: bundle, comment: "")
+        }
+
+        return nil // Return nil if no localization is found
     }
     
     private func formatLanguageCode(_ code: String) -> String {
@@ -137,6 +148,11 @@ extension String {
         }
 
         return formattedCode
+    }
+    
+    private func onlyFirstLanguageCode(_ code: String) -> String {
+        let parts = code.split(separator: "-")
+        return parts[0].lowercased()
     }
     
     var md5: String {
