@@ -225,10 +225,28 @@ public class NotificationBuilder {
         content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = notificationModel.content!.groupKey
     }
     
-    private func setCurrentTranslation(notificationModel: NotificationModel) {
-        guard let localizations = notificationModel.localizations, !localizations.isEmpty else { return }
-        
+    private func setCurrentTranslation(notificationModel: NotificationModel) {        
         let languageCode = LocalizationManager.shared.getLocalization()
+        
+        if let titleLocKey = notificationModel.content?.titleLocKey {
+            let format = titleLocKey.localized(forLanguageCode: languageCode)
+            if let args = notificationModel.content?.titleLocArgs {
+                notificationModel.content!.title = String(format: format, arguments: args)
+            } else {
+                notificationModel.content!.title = format
+            }
+        }
+
+        if let bodyLocKey = notificationModel.content?.bodyLocKey {
+            let format = bodyLocKey.localized(forLanguageCode: languageCode)
+            if let args = notificationModel.content?.bodyLocArgs {
+                notificationModel.content!.body = String(format: format, arguments: args)
+            } else {
+                notificationModel.content!.body = format
+            }
+        }
+        
+        guard let localizations = notificationModel.localizations, !localizations.isEmpty else { return }
         guard let matchedTranslationCode = getMatchedLanguageCode(localizations, languageCode: languageCode)
         else { return }
         
