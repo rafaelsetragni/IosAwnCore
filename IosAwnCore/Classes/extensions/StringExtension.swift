@@ -120,6 +120,25 @@ extension String {
         return modifiedString.components(separatedBy: stop)
     }
     
+    func localized(forLanguageCode languageCode: String) -> String {
+        guard let path = Bundle.main.path(forResource: formatLanguageCode(languageCode), ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            return self // Return the original string if no localization is found
+        }
+        return NSLocalizedString(self, bundle: bundle, comment: "")
+    }
+    
+    private func formatLanguageCode(_ code: String) -> String {
+        let parts = code.split(separator: "-")
+        var formattedCode = parts[0].lowercased()
+
+        if parts.count > 1 {
+            formattedCode += "-" + parts[1].uppercased()
+        }
+
+        return formattedCode
+    }
+    
     var md5: String {
         let data = Data(self.utf8)
         let hash = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> [UInt8] in

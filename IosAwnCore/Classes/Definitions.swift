@@ -35,6 +35,11 @@ public enum Definitions {
     public static let  BACKGROUND_HANDLE = "awesomeDartBGHandle"
     public static let  RECOVER_DISPLAYED = "recoverScheduledDisplayed"
 
+    public static let  NOTIFICATION_TITLE_KEY = "titleLocKey"
+    public static let  NOTIFICATION_BODY_KEY = "bodyLocKey"
+    public static let  NOTIFICATION_TITLE_ARGS = "titleLocArgs"
+    public static let  NOTIFICATION_BODY_ARGS = "bodyLocArgs"
+    
     public static let  SHARED_DEFAULTS = "defaults"
     public static let  SHARED_MANAGER = "sharedManager"
     public static let  SHARED_CHANNELS = "channels"
