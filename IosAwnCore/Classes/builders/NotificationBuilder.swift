@@ -240,20 +240,22 @@ public class NotificationBuilder {
         let languageCode = LocalizationManager.shared.getLocalization()
         
         if let titleLocKey = notificationModel.content?.titleLocKey {
-            let format = titleLocKey.localized(forLanguageCode: languageCode)
-            if let args = notificationModel.content?.titleLocArgs {
-                notificationModel.content!.title = String(format: format, arguments: args)
-            } else {
-                notificationModel.content!.title = format
+            if let format = titleLocKey.localized(forLanguageCode: languageCode) {
+                if let args = notificationModel.content?.titleLocArgs {
+                    notificationModel.content!.title = String(format: format, arguments: args)
+                } else {
+                    notificationModel.content!.title = format
+                }
             }
         }
 
         if let bodyLocKey = notificationModel.content?.bodyLocKey {
-            let format = bodyLocKey.localized(forLanguageCode: languageCode)
-            if let args = notificationModel.content?.bodyLocArgs {
-                notificationModel.content!.body = String(format: format, arguments: args)
-            } else {
-                notificationModel.content!.body = format
+            if let format = bodyLocKey.localized(forLanguageCode: languageCode) {
+                if let args = notificationModel.content?.bodyLocArgs {
+                    notificationModel.content!.body = String(format: format, arguments: args)
+                } else {
+                    notificationModel.content!.body = format
+                }
             }
         }
         
