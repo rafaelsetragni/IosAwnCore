@@ -29,6 +29,7 @@ class DismissedNotificationReceiver {
     
     public func addNewDismissEvent(
         fromResponse response: UNNotificationResponse,
+        buttonKeyPressed: String?,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ) throws {
         guard let jsonData:String =
@@ -46,7 +47,17 @@ class DismissedNotificationReceiver {
                     message: "The dismiss content doesn't contain any awesome information",
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewDismissEvent.jsonData")
         }
-            
+        
+        let requiredActions = response
+            .notification
+            .request
+            .content
+            .userInfo[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] as? String ?? "";
+        
+        let isAuthenticationRequired = buttonKeyPressed == nil 
+                ? false
+                : requiredActions.matches("\\b\(buttonKeyPressed!)\\b")
+        
         guard
             let notificationModel:NotificationModel =
                 NotificationBuilder
@@ -59,6 +70,7 @@ class DismissedNotificationReceiver {
                     .buildNotificationActionFromModel(
                         notificationModel: notificationModel,
                         buttonKeyPressed: nil,
+                        isAuthenticationRequired: isAuthenticationRequired,
                         userText: nil)
         else {
             throw ExceptionFactory

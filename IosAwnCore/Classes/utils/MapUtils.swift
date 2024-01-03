@@ -53,6 +53,10 @@ public class MapUtils<T: Any> {
                         fromTimeZoneId: identifier) as? T
             }
         }
+                
+        if(T.self == [String].self) {
+            return extractStringListFromValue(value) as? T
+        }
         
         if(value is T) { return value as? T }
         
@@ -61,6 +65,20 @@ public class MapUtils<T: Any> {
         }
         
         return defaultValue
+    }
+    
+    public static func extractStringListFromValue(_ value:Any?) -> [String]? {
+        if value is [String] { return value as? [String] }
+        if let stringValue = value as? String {
+            // JSON-encoded string list
+            if let list:[String] = JsonUtils.fromJsonList(stringValue) {
+                return list
+            }
+            // Comma-separated string
+            let list = stringValue.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
+            return list
+        }
+        return nil
     }
     
     public static func getRealDateOrDefault(reference: String, arguments: [String : Any?]?, defaultTimeZone:TimeZone) -> RealDateTime? {
