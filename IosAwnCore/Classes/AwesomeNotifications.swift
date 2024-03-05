@@ -540,6 +540,9 @@ public class AwesomeNotifications:
     ){
         Logger.shared.d(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
         do {
+            let buttonKeyPressed = response.actionIdentifier == UNNotificationDefaultActionIdentifier.description ?
+                nil : response.actionIdentifier
+            
             switch response.actionIdentifier {
             
                 case UNNotificationDismissActionIdentifier.description:
@@ -547,6 +550,7 @@ public class AwesomeNotifications:
                         .shared
                         .addNewDismissEvent(
                             fromResponse: response,
+                            buttonKeyPressed: buttonKeyPressed,
                             whenFinished: { (success:Bool, error:Error?) in
                                 
                                 if !success && self._originalNotificationCenterDelegate != nil {
@@ -566,6 +570,7 @@ public class AwesomeNotifications:
                         .shared
                         .addNewActionEvent(
                             fromResponse: response,
+                            buttonKeyPressed: buttonKeyPressed,
                             whenFinished: { (success:Bool, error:Error?) in
                                 
                                 if !success && self._originalNotificationCenterDelegate != nil {

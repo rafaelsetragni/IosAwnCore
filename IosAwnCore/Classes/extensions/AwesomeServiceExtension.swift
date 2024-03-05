@@ -86,10 +86,20 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     }
                 }
                 
+                var requiredActions:[String] = []
+                if let buttons = notificationModel?.actionButtons {
+                    buttons.forEach { button in
+                        if let buttonKey = button.key, button.isAuthenticationRequired ?? false {
+                            requiredActions.append(buttonKey)
+                        }
+                    }
+                }
+                
                 NotificationBuilder
                     .newInstance()
                     .setUserInfoContent(
                         notificationModel: notificationModel!,
+                        requiredActions: requiredActions.joined(separator: ","),
                         content: content)
                 
                 if StringUtils.shared.isNullOrEmpty(title) {
