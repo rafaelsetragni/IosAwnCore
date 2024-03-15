@@ -239,7 +239,7 @@ public class NotificationContentModel : AbstractModel {
     }
     
     public func validate() throws {
-
+        
         if(IntUtils.isNullOrEmpty(id)){
             throw ExceptionFactory
                     .shared

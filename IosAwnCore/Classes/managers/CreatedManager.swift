@@ -27,12 +27,27 @@ public class CreatedManager : EventManager {
     
 
     
-    public func saveCreated(received:NotificationReceived) -> Bool {
+    public func saveCreated(
+        received:NotificationReceived,
+        lifeCycle: NotificationLifeCycle,
+        source: NotificationSource
+    ) -> Bool {
+        guard let id: Int = received.id
+        else { return false }
+        if received.createdDate == nil {
+            if !received.registerCreateEvent(
+                inLifeCycle: lifeCycle,
+                fromSource: source
+            ) { return false }
+        }
+        guard let createdDate: RealDateTime = received.createdDate
+        else { return false }
+        
         storage.set(
             received.toMap(),
             referenceKey: getKeyByIdAndDate(
-                id: received.id!,
-                referenceDate: received.createdDate!
+                id: id,
+                referenceDate: createdDate
             )
         )
         return true
@@ -45,6 +60,12 @@ public class CreatedManager : EventManager {
         for data in dataList {
             guard let received = NotificationReceived(fromMap: data)
             else { continue }
+            if received.createdDate == nil {
+                _ = received.registerCreateEvent(
+                    inLifeCycle: .Terminated,
+                    fromSource: .Local
+                )
+            }
             returnedList.append(received)
         }
         
@@ -59,6 +80,12 @@ public class CreatedManager : EventManager {
             guard let received = NotificationReceived(fromMap: data)
             else { continue }
             if received.id != id { continue }
+            if received.createdDate == nil {
+                _ = received.registerCreateEvent(
+                    inLifeCycle: .Terminated,
+                    fromSource: .Local
+                )
+            }
             returnedList.append(received)
         }
         

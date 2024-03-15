@@ -234,7 +234,10 @@ public class NotificationSenderAndScheduler {
                 _ = CreatedManager
                     .shared
                     .saveCreated(
-                        received: receivedNotification)
+                        received: receivedNotification,
+                        lifeCycle: self.appLifeCycle,
+                        source: self.createdSource
+                    )
                 
             } else {
                 BroadcastSender
