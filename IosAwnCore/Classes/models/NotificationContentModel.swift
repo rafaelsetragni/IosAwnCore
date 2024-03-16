@@ -19,6 +19,11 @@ public class NotificationContentModel : AbstractModel {
     public var summary: String?
     public var showWhen: Bool?
     
+    public var titleLocKey:String?
+    public var bodyLocKey:String?
+    public var titleLocArgs:[String]?
+    public var bodyLocArgs:[String]?
+    
     public var payload:[String:String?]?
     
     public var wakeUpScreen: Bool?
@@ -128,6 +133,11 @@ public class NotificationContentModel : AbstractModel {
         self.summary        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SUMMARY, arguments: arguments)
         self.showWhen       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_WHEN, arguments: arguments)
         
+        self.titleLocKey    = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE_KEY, arguments: arguments)
+        self.bodyLocKey     = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY_KEY, arguments: arguments)
+        self.titleLocArgs   = MapUtils<[String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE_ARGS, arguments: arguments)
+        self.bodyLocArgs    = MapUtils<[String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY_ARGS, arguments: arguments)
+        
         self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_PLAY_SOUND, arguments: arguments)
         self.customSound           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CUSTOM_SOUND, arguments: arguments)
         
@@ -180,6 +190,13 @@ public class NotificationContentModel : AbstractModel {
         if(self.groupKey != nil) {mapData[Definitions.NOTIFICATION_GROUP_KEY] = self.groupKey}
         if(self.title != nil){ mapData[Definitions.NOTIFICATION_TITLE] = self.title }
         if(self.body != nil){ mapData[Definitions.NOTIFICATION_BODY] = self.body }
+        
+        
+        if(self.titleLocKey != nil){ mapData[Definitions.NOTIFICATION_TITLE_KEY] = self.titleLocKey }
+        if(self.bodyLocKey != nil){ mapData[Definitions.NOTIFICATION_BODY_KEY] = self.bodyLocKey }
+        if(self.titleLocArgs != nil){ mapData[Definitions.NOTIFICATION_TITLE_ARGS] = self.titleLocArgs }
+        if(self.bodyLocArgs != nil){ mapData[Definitions.NOTIFICATION_BODY_ARGS] = self.bodyLocArgs }
+        
         if(self.summary != nil){ mapData[Definitions.NOTIFICATION_SUMMARY] = self.summary }
         if(self.wakeUpScreen != nil){ mapData[Definitions.NOTIFICATION_WAKE_UP_SCREEN] = self.wakeUpScreen }
         if(self.showWhen != nil){ mapData[Definitions.NOTIFICATION_SHOW_WHEN] = self.showWhen }
@@ -222,7 +239,7 @@ public class NotificationContentModel : AbstractModel {
     }
     
     public func validate() throws {
-
+        
         if(IntUtils.isNullOrEmpty(id)){
             throw ExceptionFactory
                     .shared
@@ -268,15 +285,6 @@ public class NotificationContentModel : AbstractModel {
     }
     
     private func validateRequiredImages() throws {
-        if bigPicture == nil && largeIcon == nil {
-            throw ExceptionFactory
-                    .shared
-                    .createNewAwesomeException(
-                        className: NotificationContentModel.TAG,
-                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
-                        message: "bigPicture or largeIcon is required",
-                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".image.required")
-        }
     }
     
     private func validateIcon(_ icon:String?) throws {

@@ -26,25 +26,43 @@ public class JsonUtils {
     public static func fromJson(_ text:String? ) -> [String:Any?]? {
                 
         if StringUtils.shared.isNullOrEmpty(text) { return nil }
-            
-        if let data = text!.data(using: String.Encoding.utf8) {
-            let decodedData:[String:Any?]? = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            return decodedData
+           
+        if let data = text!.data(using: .utf8) {
+            do {
+                let decodedData = try JSONSerialization.jsonObject(with: data, options: [])
+                return decodedData as? [String: Any]
+            } catch {
+                print("Error parsing JSON: \(error)")
+            }
         }
         
         return nil
-        
+    }
+    
+    public static func fromJsonList(_ text:String? ) -> [String]? {
+                
+        if StringUtils.shared.isNullOrEmpty(text) { return nil }
+           
+        if let data = text!.data(using: .utf8) {
+            do {
+                let decodedData = try JSONSerialization.jsonObject(with: data, options: [])
+                return decodedData as? [String]
+            } catch {
+                print("Error parsing JSON: \(error)")
+            }
+        }
+        return nil
     }
 
-        public static func fromJsonArr(_ text:String? ) -> [Dictionary<String,Any>]? {
+    public static func fromJsonArr(_ text:String? ) -> [Dictionary<String,Any>]? {
 
-            if StringUtils.shared.isNullOrEmpty(text) { return nil }
-            if let data = text!.data(using: String.Encoding.utf8) {
-              let jsonArray = try? JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
-              return jsonArray
-            }
-                return nil
-
+        if StringUtils.shared.isNullOrEmpty(text) { return nil }
+        if let data = text!.data(using: String.Encoding.utf8) {
+          let jsonArray = try? JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
+          return jsonArray
         }
+            return nil
+
+    }
     
 }

@@ -30,7 +30,11 @@ class BroadcastSender {
         whenFinished completionHandler: @escaping (Bool) -> Void
     ){
         if SwiftUtils.isRunningOnExtension() || LifeCycleManager.shared.currentLifeCycle == .AppKilled {
-            _ = CreatedManager.shared.saveCreated(received: notificationReceived)
+            _ = CreatedManager.shared.saveCreated(
+                received: notificationReceived,
+                lifeCycle: notificationReceived.createdLifeCycle ?? LifeCycleManager.shared.currentLifeCycle,
+                source: notificationReceived.createdSource ?? .Firebase
+            )
         }
         else {
             AwesomeEventsReceiver

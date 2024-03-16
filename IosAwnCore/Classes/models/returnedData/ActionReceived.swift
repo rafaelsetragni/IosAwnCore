@@ -16,21 +16,23 @@ public class ActionReceived : NotificationReceived {
     public var dismissedLifeCycle: NotificationLifeCycle?
     public var actionDate: RealDateTime?
     public var dismissedDate: RealDateTime?
+    public var isAuthenticationRequired: Bool = false
     
     override init(_ contentModel:NotificationContentModel?){
         super.init(contentModel)
-        
         if(contentModel == nil){ return }
     }
     
     convenience init(
         _ contentModel:NotificationContentModel?,
         buttonKeyPressed: String?,
-        buttonKeyInput: String?
+        buttonKeyInput: String?,
+        isAuthenticationRequired:Bool
     ){
         self.init(contentModel)
         if(contentModel == nil){ return }
         
+        self.isAuthenticationRequired = isAuthenticationRequired
         self.buttonKeyPressed = buttonKeyPressed
         self.buttonKeyInput = buttonKeyInput
     }
@@ -49,6 +51,8 @@ public class ActionReceived : NotificationReceived {
         
         self.actionLifeCycle  = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_ACTION_LIFECYCLE, arguments: arguments)
         self.dismissedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, arguments: arguments)
+        
+        self.isAuthenticationRequired = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED, arguments: arguments) ?? false
     }
     
     override public func toMap() -> [String : Any?] {
@@ -61,6 +65,7 @@ public class ActionReceived : NotificationReceived {
         if(dismissedLifeCycle != nil) {dataMap[Definitions.NOTIFICATION_DISMISSED_LIFECYCLE] = self.dismissedLifeCycle?.rawValue}
         if(actionDate != nil) {dataMap[Definitions.NOTIFICATION_ACTION_DATE] = self.actionDate!.description}
         if(dismissedDate != nil) {dataMap[Definitions.NOTIFICATION_DISMISSED_DATE] = self.dismissedDate!.description}
+        dataMap[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] = self.isAuthenticationRequired
         
         return dataMap
     }
