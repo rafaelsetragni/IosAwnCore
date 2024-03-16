@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.9.2'
+  s.version          = '0.9.3'
   s.summary          = 'Awesome Notifications iOS Core'
 
   s.description      = <<-DESC
