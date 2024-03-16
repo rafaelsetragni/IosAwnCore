@@ -599,10 +599,10 @@ public class NotificationBuilder {
 
     private func setLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         
+        setBigPictureLayout(notificationModel: notificationModel, content: content)
         switch notificationModel.content!.notificationLayout {
             
             case .BigPicture:
-                setBigPictureLayout(notificationModel: notificationModel, content: content)
                 return
                 
             case .BigText:

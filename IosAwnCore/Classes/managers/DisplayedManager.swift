@@ -28,11 +28,24 @@ public class DisplayedManager : EventManager {
     
     
     public func saveDisplayed(received:NotificationReceived) -> Bool {
+        guard let id: Int = received.id
+        else { return false }
+        if received.displayedDate == nil {
+            received.displayedDate = RealDateTime.init(
+                fromTimeZone: TimeZone(identifier: "UTC")
+            )
+            received.displayedLifeCycle = LifeCycleManager
+                .shared
+                .currentLifeCycle
+        }
+        guard let displayedDate: RealDateTime = received.displayedDate
+        else { return false }
+        
         storage.set(
             received.toMap(),
             referenceKey: getKeyByIdAndDate(
-                id: received.id!,
-                referenceDate: received.displayedDate!
+                id: id,
+                referenceDate: displayedDate
             )
         )
         return true

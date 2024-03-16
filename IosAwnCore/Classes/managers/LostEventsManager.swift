@@ -99,24 +99,34 @@ public class LostEventsManager {
             for createdNotification in lostCreated {
                 do {
                     try createdNotification.validate()
+                    if (createdNotification.createdDate == nil){
+                        _ = createdNotification.registerCreateEvent(
+                            inLifeCycle: createdNotification.createdLifeCycle ?? .Terminated,
+                            fromSource: createdNotification.createdSource ?? .Local
+                        )
+                    }
+                    guard let id:Int = createdNotification.id
+                    else { continue }
+                    guard let createdDate:RealDateTime = createdNotification.createdDate
+                    else { continue }
                     
                     lostEvents.append(EventRegister(
                         eventName: Definitions.EVENT_NOTIFICATION_CREATED,
-                        eventDate: createdNotification.createdDate!,
+                        eventDate: createdDate,
                         notificationContent: createdNotification
                     ))
                     
+                    if !CreatedManager
+                        .shared
+                        .removeCreated(
+                            id: id,
+                            createdDate: createdDate)
+                    {
+                        Logger.shared.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
+                    }
+                    
                 } catch {
                     Logger.shared.e(TAG, "Created event \(String(describing: createdNotification.id)) failed to recover: \(error)")
-                }
-                
-                if !CreatedManager
-                    .shared
-                    .removeCreated(
-                        id: createdNotification.id!,
-                        createdDate: createdNotification.createdDate!)
-                {
-                    Logger.shared.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
                 }
             }
         }
@@ -160,7 +170,10 @@ public class LostEventsManager {
             let lostDisplayed = DisplayedManager.shared.listDisplayed()
             for displayedNotification in lostDisplayed {
                 
-                guard let displayedDate:RealDateTime = displayedNotification.displayedDate ?? displayedNotification.createdDate
+                guard let id:Int = displayedNotification.id
+                else { continue }
+                guard let displayedDate:RealDateTime =
+                        displayedNotification.displayedDate ?? displayedNotification.createdDate
                 else { continue }
                 
                 if currentDate >= displayedDate && lastDisplayedDate <= displayedDate {
@@ -169,7 +182,7 @@ public class LostEventsManager {
                         
                         lostEvents.append(EventRegister(
                             eventName: Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                            eventDate: displayedNotification.displayedDate!,
+                            eventDate: displayedDate,
                             notificationContent: displayedNotification
                         ))
                     } catch {
@@ -180,10 +193,10 @@ public class LostEventsManager {
                 if !DisplayedManager
                     .shared
                     .removeDisplayed(
-                        id: displayedNotification.id!,
-                        displayedDate: displayedNotification.displayedDate!)
+                        id: id,
+                        displayedDate: displayedDate)
                 {
-                    Logger.shared.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
+                    Logger.shared.e(TAG, "Displayed event \(displayedNotification.id ?? -1) could not be cleaned")
                 }
             }
             
