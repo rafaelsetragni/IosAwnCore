@@ -515,8 +515,10 @@ public class AwesomeNotifications:
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
     @objc public func didFinishLaunch(_ application: UIApplication) {
-        
-        UNUserNotificationCenter.current().delegate = self
+
+        let notificationCenter = UNUserNotificationCenter.current()
+        _originalNotificationCenterDelegate = notificationCenter.delegate
+        notificationCenter.delegate = self
         
         AwesomeNotifications.didFinishLaunch = true
         if AwesomeNotifications.completionHandlerGetInitialAction != nil {
