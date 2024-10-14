@@ -82,12 +82,6 @@ class DismissedNotificationReceiver {
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewDismissEvent.dismissedReceived")
         }
         
-        dismissedReceived.registerDismissedEvent(
-            withLifeCycle:
-                LifeCycleManager
-                    .shared
-                    .currentLifeCycle)
-        
         BroadcastSender
             .shared
             .sendBroadcast(

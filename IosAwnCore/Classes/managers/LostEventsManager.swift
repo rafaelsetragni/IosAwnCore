@@ -101,14 +101,15 @@ public class LostEventsManager {
                     try createdNotification.validate()
                     if (createdNotification.createdDate == nil){
                         _ = createdNotification.registerCreateEvent(
-                            inLifeCycle: createdNotification.createdLifeCycle ?? .Terminated,
+                            withLifeCycle: createdNotification.createdLifeCycle ?? .Terminated,
                             fromSource: createdNotification.createdSource ?? .Local
                         )
                     }
                     guard let id:Int = createdNotification.id
                     else { continue }
-                    guard let createdDate:RealDateTime = createdNotification.createdDate
-                    else { continue }
+                    let createdDate:RealDateTime = createdNotification.createdDate ?? RealDateTime.init(
+                        fromTimeZone: TimeZone(identifier: "UTC")
+                    )
                     
                     lostEvents.append(EventRegister(
                         eventName: Definitions.EVENT_NOTIFICATION_CREATED,
@@ -172,9 +173,11 @@ public class LostEventsManager {
                 
                 guard let id:Int = displayedNotification.id
                 else { continue }
-                guard let displayedDate:RealDateTime =
-                        displayedNotification.displayedDate ?? displayedNotification.createdDate
-                else { continue }
+                let displayedDate:RealDateTime =
+                        displayedNotification.displayedDate ?? RealDateTime.init(
+                            fromTimeZone: TimeZone(identifier: "UTC")
+                        )
+                displayedNotification.displayedDate = displayedDate
                 
                 if currentDate >= displayedDate && lastDisplayedDate <= displayedDate {
                     do {
@@ -233,12 +236,17 @@ public class LostEventsManager {
                 .listDismissed()
             
             for dismissedNotification in lostDismissed {
+                let dismissedDate:RealDateTime =
+                        dismissedNotification.dismissedDate ?? RealDateTime.init(
+                            fromTimeZone: TimeZone(identifier: "UTC")
+                        )
+                dismissedNotification.dismissedDate = dismissedDate
                 do {
                     try dismissedNotification.validate()
                     
                     lostEvents.append(EventRegister(
                         eventName: Definitions.EVENT_NOTIFICATION_DISMISSED,
-                        eventDate: dismissedNotification.dismissedDate!,
+                        eventDate: dismissedDate,
                         notificationContent: dismissedNotification
                     ))
                     
@@ -277,12 +285,17 @@ public class LostEventsManager {
                 .recoverActions()
             
             for notificationAction in lostActions {
+                let actionDate:RealDateTime =
+                notificationAction.actionDate ?? RealDateTime.init(
+                            fromTimeZone: TimeZone(identifier: "UTC")
+                        )
+                notificationAction.actionDate = actionDate
                 do {
                     try notificationAction.validate()
                     
                     lostEvents.append(EventRegister(
                         eventName: Definitions.EVENT_DEFAULT_ACTION,
-                        eventDate: notificationAction.actionDate!,
+                        eventDate: actionDate,
                         notificationContent: notificationAction
                     ))
                     

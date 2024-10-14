@@ -36,7 +36,7 @@ public class CreatedManager : EventManager {
         else { return false }
         if received.createdDate == nil {
             if !received.registerCreateEvent(
-                inLifeCycle: lifeCycle,
+                withLifeCycle: lifeCycle,
                 fromSource: source
             ) { return false }
         }
@@ -62,7 +62,7 @@ public class CreatedManager : EventManager {
             else { continue }
             if received.createdDate == nil {
                 _ = received.registerCreateEvent(
-                    inLifeCycle: .Terminated,
+                    withLifeCycle: .Terminated,
                     fromSource: .Local
                 )
             }
@@ -82,7 +82,7 @@ public class CreatedManager : EventManager {
             if received.id != id { continue }
             if received.createdDate == nil {
                 _ = received.registerCreateEvent(
-                    inLifeCycle: .Terminated,
+                    withLifeCycle: .Terminated,
                     fromSource: .Local
                 )
             }
