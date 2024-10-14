@@ -124,7 +124,7 @@ public class DisplayedManager : EventManager {
                 let receivedNotification = NotificationReceived(notificationScheduled.content)
                 receivedNotification.registerDisplayedEvent(
                     withDisplayedDate: displayedDate,
-                    inLifeCycle: displayedDate == limitDate
+                    withLifeCycle: displayedDate == limitDate
                         ? .Foreground
                         : lastLifeCycle
                 )

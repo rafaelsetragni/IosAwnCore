@@ -29,6 +29,14 @@ class BroadcastSender {
         notificationCreated notificationReceived: NotificationReceived,
         whenFinished completionHandler: @escaping (Bool) -> Void
     ){
+        _ = notificationReceived.registerCreateEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle,
+            fromSource: notificationReceived.createdSource ?? .Local
+        )
+        
         if SwiftUtils.isRunningOnExtension() || LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             _ = CreatedManager.shared.saveCreated(
                 received: notificationReceived,
@@ -51,6 +59,12 @@ class BroadcastSender {
         notificationDisplayed notificationReceived: NotificationReceived,
         whenFinished completionHandler: @escaping (Bool) -> Void
     ){
+        notificationReceived.registerDisplayedEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         if SwiftUtils.isRunningOnExtension() || LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             _ = DisplayedManager.shared.saveDisplayed(received: notificationReceived)
         }
@@ -73,6 +87,12 @@ class BroadcastSender {
         actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        actionReceived.registerActionEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         if !ActionManager.shared.recovered { //LifeCycleManager.shared.currentLifeCycle == .AppKilled
             ActionManager.shared.saveAction(received: actionReceived)
             Logger.shared.d(TAG, "action saved")
@@ -93,6 +113,12 @@ class BroadcastSender {
         notificationDismissed actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        actionReceived.registerDismissedEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             DismissedManager.shared.saveDismissed(received: actionReceived)
         }
@@ -111,6 +137,12 @@ class BroadcastSender {
         silentAction: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        silentAction.registerActionEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         AwesomeEventsReceiver
             .shared
             .addActionEvent(
@@ -124,6 +156,12 @@ class BroadcastSender {
         backgroundAction: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        backgroundAction.registerActionEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         AwesomeEventsReceiver
             .shared
             .addActionEvent(
@@ -137,6 +175,12 @@ class BroadcastSender {
         silentAction actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        actionReceived.registerActionEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         BackgroundService
             .shared
             .enqueue(
@@ -148,6 +192,12 @@ class BroadcastSender {
         silentBackgroundAction actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
+        actionReceived.registerActionEvent(
+            withLifeCycle:
+                LifeCycleManager
+                    .shared
+                    .currentLifeCycle)
+        
         BackgroundService
             .shared
             .enqueue(

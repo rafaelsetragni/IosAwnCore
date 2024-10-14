@@ -75,11 +75,13 @@ public class ActionReceived : NotificationReceived {
     }
     
     public func registerActionEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
+        if self.actionDate != nil { return }
         actionDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
         actionLifeCycle = lifeCycle
     }
     
     public func registerDismissedEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
+        if self.dismissedDate != nil { return }
         dismissedDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
         dismissedLifeCycle = lifeCycle
     }
