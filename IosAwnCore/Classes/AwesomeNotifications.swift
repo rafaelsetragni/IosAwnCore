@@ -540,6 +540,11 @@ public class AwesomeNotifications:
     ){
         Logger.shared.d(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
         do {
+            let shouldSkip = InterceptorManager
+                .shared
+                .didReceiveResponse(center, response: response, completionHandler: completionHandler)
+            if shouldSkip { return }
+            
             let buttonKeyPressed = response.actionIdentifier == UNNotificationDefaultActionIdentifier.description ?
                 nil : response.actionIdentifier
             
