@@ -147,7 +147,7 @@ public class NotificationSenderAndScheduler {
             notificationModel
                 .content!
                 .registerCreateEvent(
-                    inLifeCycle: self.appLifeCycle,
+                    withLifeCycle: self.appLifeCycle,
                     fromSource: self.createdSource)
         
         if notificationModel.schedule != nil {
@@ -193,7 +193,7 @@ public class NotificationSenderAndScheduler {
                     }
                     
                     receivedNotification = NotificationReceived(notificationModel.content)
-                    receivedNotification?.registerDisplayedEvent(inLifeCycle: self.appLifeCycle)
+                    receivedNotification?.registerDisplayedEvent(withLifeCycle: self.appLifeCycle)
 
                     receivedNotification!.displayedLifeCycle =
                         receivedNotification!.displayedLifeCycle ?? self.appLifeCycle
