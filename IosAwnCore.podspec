@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '0.10.0'
+  s.version          = '0.11.0'
   s.summary          = 'Awesome Notifications iOS Core'
 
   s.description      = <<-DESC
@@ -24,7 +24,7 @@ Awesome Notifications Ios Core (Only iOS devices).
   
   s.static_framework = true
   s.platform = :ios
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
   s.swift_version = '5.3'
 
   s.source_files = 'IosAwnCore/Classes/**/*'
