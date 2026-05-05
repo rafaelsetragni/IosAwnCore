@@ -15,19 +15,13 @@ public class ScheduleManager : EventManager {
     
     
     // **************************** SINGLETON PATTERN *************************************
-    
-    static var instance:ScheduleManager?
-    public static var shared:ScheduleManager {
-        get {
-            ScheduleManager.instance =
-            ScheduleManager.instance ?? ScheduleManager()
-            return ScheduleManager.instance!
-        }
-    }
+
+    public static let shared = ScheduleManager()
+
     private override init(){
         pendingSchedules = pendingShared.get(referenceKey: "pending") as? [String:String] ?? [:]
     }
-    
+
     // **************************** SINGLETON PATTERN *************************************
     
     public func removeSchedule( id:Int ) -> Bool {
