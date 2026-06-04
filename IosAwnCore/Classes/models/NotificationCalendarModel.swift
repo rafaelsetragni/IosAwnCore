@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 public class NotificationCalendarModel : NotificationScheduleModel {
     static let TAG = "NotificationCalendarModel"

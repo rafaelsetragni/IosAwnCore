@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import UserNotifications
 
 public class AwesomeNotifications:
         NSObject,

@@ -1,5 +1,6 @@
 
 import CommonCrypto
+import Foundation
 
 extension String {
     

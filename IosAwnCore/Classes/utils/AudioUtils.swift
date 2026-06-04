@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 @available(iOS 10.0, *)
 open class AudioUtils: MediaUtils {
