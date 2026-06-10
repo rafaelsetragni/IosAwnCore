@@ -172,7 +172,14 @@ open class BitmapUtils : MediaUtils {
     }
     
     open func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
-        return nil
+        let mediaPath:String? = cleanMediaPath(mediaPath)
+        if StringUtils.shared.isNullOrEmpty(mediaPath) { return nil }
+
+        // Resolve Flutter-bundled assets straight from the App.framework bundle. This needs no
+        // Flutter runtime, so it works both in the host app (as the fallback resolver) and inside
+        // an app extension (e.g. a Notification Service Extension) without linking Flutter there.
+        guard let topPath = SwiftUtils.getFlutterAssetPath(forAsset: mediaPath!) else { return nil }
+        return getBitmapFromFile(fromRealPath: topPath)
     }
     
     open func getBitmapFromResource(_ mediaPath:String) -> UIImage? {
