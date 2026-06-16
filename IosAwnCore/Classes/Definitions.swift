@@ -1,3 +1,4 @@
+import Foundation
 public enum Definitions {
     public static let  MAIN_BUNDLE_ID = Bundle.main.getBundleName()
     public static let  USER_DEFAULT_TAG =

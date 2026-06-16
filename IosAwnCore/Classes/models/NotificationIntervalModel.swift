@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 public class NotificationIntervalModel : NotificationScheduleModel {
     

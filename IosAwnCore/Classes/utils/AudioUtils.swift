@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 @available(iOS 10.0, *)
 open class AudioUtils: MediaUtils {
@@ -111,7 +112,14 @@ open class AudioUtils: MediaUtils {
     }
     
     open func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
-        return nil
+        let mediaPath:String? = cleanMediaPath(mediaPath)
+        if StringUtils.shared.isNullOrEmpty(mediaPath) { return nil }
+
+        // Resolve Flutter-bundled assets straight from the App.framework bundle, with no Flutter
+        // runtime, so it works both in the host app (as the fallback resolver) and inside an app
+        // extension (e.g. a Notification Service Extension).
+        guard let topPath = SwiftUtils.getFlutterAssetPath(forAsset: mediaPath!) else { return nil }
+        return getSoundFromFile(fromRealPath: topPath)
     }
     
     open func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {

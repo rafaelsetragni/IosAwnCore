@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UserNotifications
+import UIKit
 
 typealias ActivityCompletionHandler = () -> ()
 
@@ -621,18 +623,25 @@ public class PermissionManager {
 
     public func startTestedActivity(_ url:String) -> Bool {
 
-        guard let settingsUrl = URL(string: url) else {
+        guard
+            let settingsUrl = URL(string: url),
+            let application = SwiftUtils.sharedApplication()
+        else {
             return false
         }
-        
-        if UIApplication.shared.canOpenURL(settingsUrl) {
-            DispatchQueue.main.async {
-                UIApplication.shared.open(settingsUrl)
-            }
-            return true
+
+        // `open(_:)` is unavailable in app extensions, so it is dispatched through the
+        // Objective-C runtime to keep this file compiling under `-application-extension`.
+        // This is an app-only action and is never reached from an app extension.
+        let openSelector = NSSelectorFromString("openURL:")
+        guard application.responds(to: openSelector) else {
+            return false
         }
-        
-        return false
+
+        DispatchQueue.main.async {
+            application.perform(openSelector, with: settingsUrl)
+        }
+        return true
     }
     public func handlePermissionResult() {
         fireActivityCompletionHandle()

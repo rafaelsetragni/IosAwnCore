@@ -5,6 +5,7 @@
 //  Created by Rafael Setragni on 16/10/20.
 //
 
+import UserNotifications
 @available(iOS 10.0, *)
 open class AwesomeServiceExtension: UNNotificationServiceExtension {
     let TAG = "AwesomeServiceExtension"

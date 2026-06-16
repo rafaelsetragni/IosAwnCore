@@ -6,15 +6,30 @@
 //
 
 import Foundation
+import UIKit
 public class SwiftUtils{
-    
+
     private static var _isExtension:Bool?
-    
+
     public static func isRunningOnExtension() -> Bool {
         if _isExtension == nil {
             _isExtension = Bundle.main.bundlePath.hasSuffix(".appex")
         }
         return _isExtension!
+    }
+
+    /// Resolves `UIApplication.shared` through the Objective-C runtime so that the
+    /// app-only code paths that need it still compile when this package is linked into
+    /// an app extension (built with `-application-extension`, where `shared` is marked
+    /// unavailable). Inside an extension this returns nil; combined with the
+    /// `isRunningOnExtension()` guards at the call sites, those paths never run there.
+    public static func sharedApplication() -> UIApplication? {
+        let selector = NSSelectorFromString("sharedApplication")
+        let applicationClass: AnyObject? = NSClassFromString("UIApplication")
+        guard let appClass = applicationClass, appClass.responds(to: selector) else {
+            return nil
+        }
+        return appClass.perform(selector)?.takeUnretainedValue() as? UIApplication
     }
     
     public static func getMainBundle() -> Bundle {
