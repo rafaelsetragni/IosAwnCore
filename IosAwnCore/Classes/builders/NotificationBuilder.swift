@@ -158,7 +158,7 @@ public class NotificationBuilder {
                 content: content)
         
         setWakeUpScreen(notificationModel: notificationModel, content: content)
-        setCriticalAlert(channel: channel, content: content)
+        setCriticalAlert(channel: channel, notificationModel: notificationModel, content: content)
         
         let requiredActions = listRequiredActions(notificationModel: notificationModel)
         setUserInfoContent(notificationModel: notificationModel, requiredActions: requiredActions, content: content)
@@ -505,7 +505,34 @@ public class NotificationBuilder {
     }
 
     private func setSound(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        
+        let criticalRequested = CriticalAlertUtils.isCriticalAlertRequested(
+            channel: channel,
+            notificationModel: notificationModel)
+
+        if criticalRequested && CriticalAlertUtils.canDeliverCriticalAlerts() {
+            if (notificationModel.content!.playSound ?? false) && (channel.playSound ?? false) {
+                if #available(iOS 12.0, *) {
+                    if !StringUtils.shared.isNullOrEmpty(notificationModel.content!.customSound) {
+                        content.sound = AudioUtils.shared.getSoundFromSource(
+                            SoundPath: notificationModel.content!.customSound!)
+                        return
+                    }
+
+                    if !StringUtils.shared.isNullOrEmpty(channel.soundSource) {
+                        content.sound = AudioUtils.shared.getSoundFromSource(
+                            SoundPath: channel.soundSource!)
+                        return
+                    }
+
+                    content.sound = UNNotificationSound.defaultCritical
+                    return
+                }
+            } else {
+                content.sound = nil
+            }
+            return
+        }
+
         switch notificationModel.importance ?? .Default {
             
             case .Default, .High, .Max:
@@ -567,11 +594,23 @@ public class NotificationBuilder {
         }
     }
     
-    private func setCriticalAlert(channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        if channel.criticalAlerts ?? false {
-            if #available(iOS 15.0, *) {
-                content.interruptionLevel = .critical
-            }
+    private func setCriticalAlert(
+        channel: NotificationChannelModel,
+        notificationModel: NotificationModel,
+        content: UNMutableNotificationContent
+    ){
+        let requested = CriticalAlertUtils.isCriticalAlertRequested(
+            channel: channel,
+            notificationModel: notificationModel)
+        guard requested else { return }
+
+        guard CriticalAlertUtils.canDeliverCriticalAlerts() else {
+            Logger.shared.d(TAG, "Critical alert requested but not available; using standard delivery")
+            return
+        }
+
+        if #available(iOS 15.0, *) {
+            content.interruptionLevel = .critical
         }
     }
 
