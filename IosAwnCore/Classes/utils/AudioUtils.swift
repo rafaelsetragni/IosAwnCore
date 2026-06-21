@@ -125,21 +125,30 @@ open class AudioUtils: MediaUtils {
     open func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
         var mediaPath:String? = cleanMediaPath(mediaPath)
         
-        //do {
-            if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
-                var topPath:String? = Bundle.main.url(forResource: mediaPath!, withExtension: "aiff")?.absoluteString
+        // copy to mutable variable
+        var name = mediaPath
+        
+        // replaceRegex returns Bool match/success, and mutates the variable 'name'
+        if name != nil && name!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
                 
-                if ((topPath?.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1")) != nil){
-                    return UNNotificationSound(named: UNNotificationSoundName(rawValue: topPath!))
+            // 1. Try with the extensions (caf, aiff, wav, mp3)
+            let extensions = ["caf", "aiff", "wav", "mp3"]
+            
+            for ext in extensions {
+                if let validName = name, let path = Bundle.main.path(forResource: validName, ofType: ext) {
+                     return UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(validName).\(ext)"))
                 }
-                return UNNotificationSound.default
             }
-            return nil
-          /*
-        } catch let error {
-            Logger.shared.e("AudioUtils", error)
-            return nil
-        }*/
+            
+            // 2. Fallback to original behavior
+            var topPath:String? = Bundle.main.url(forResource: mediaPath!, withExtension: "aiff")?.absoluteString
+            
+            if ((topPath?.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1")) != nil){
+                return UNNotificationSound(named: UNNotificationSoundName(rawValue: topPath!))
+            }
+            return UNNotificationSound.default
+        }
+        return nil
     }
     
     public func isValidSound(_ mediaPath:String?) -> Bool {
