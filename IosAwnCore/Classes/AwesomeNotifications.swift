@@ -142,7 +142,8 @@ public class AwesomeNotifications:
     }
     
     func activateiOSNotifications(){
-        
+        UNUserNotificationCenter.current().delegate = self
+
         let categoryObject = UNNotificationCategory(
             identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER.uppercased(),
             actions: [],
@@ -153,11 +154,22 @@ public class AwesomeNotifications:
         UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
             UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
         })
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.didFinishLaunch),
             name: UIApplication.didFinishLaunchingNotification, object: nil)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.sceneDidActivate),
+            name: UIScene.didActivateNotification, object: nil)
+    }
+
+    @objc func sceneDidActivate(_ notification: Notification) {
+        if !AwesomeNotifications.didFinishLaunch {
+            triggerDidFinishLaunch()
+        }
     }
     
     // ***********************  EVENT INTERFACES  *******************************
@@ -516,19 +528,26 @@ public class AwesomeNotifications:
     
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
-    @objc public func didFinishLaunch(_ application: UIApplication) {
-        
+    @objc public func didFinishLaunch(_ notification: Notification) {
+        triggerDidFinishLaunch()
+    }
+
+    func triggerDidFinishLaunch() {
+        if AwesomeNotifications.didFinishLaunch {
+            return
+        }
+
         UNUserNotificationCenter.current().delegate = self
-        
         AwesomeNotifications.didFinishLaunch = true
+
         if AwesomeNotifications.completionHandlerGetInitialAction != nil {
             AwesomeNotifications
                 .completionHandlerGetInitialAction!(
                     ActionManager.shared.getInitialAction(
                         removeFromEvents: AwesomeNotifications.removeFromEvents))
+            AwesomeNotifications.completionHandlerGetInitialAction = nil
         }
-        
-            
+
         if AwesomeNotifications.debug {
             Logger.shared.d(TAG, "Awesome Notifications attached for iOS")
         }
