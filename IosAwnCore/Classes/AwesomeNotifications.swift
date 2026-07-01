@@ -153,11 +153,46 @@ public class AwesomeNotifications:
         UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
             UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
         })
-        
+
+        // Claim the notification-center delegate synchronously at registration.
+        // Apple requires the delegate to be assigned BEFORE the app finishes
+        // launching; otherwise a notification that launched a killed app is
+        // dropped by the system instead of being delivered via didReceive —
+        // which is exactly the getInitialAction / initial-action path. Under
+        // UIScene the plugin registers during scene connection, so this must not
+        // be deferred. We do not chain to a previously-installed delegate (e.g.
+        // the official FirebaseMessaging plugin, which can claim it after us
+        // without forwarding); FCM is handled by awesome_notifications_fcm.
+        UNUserNotificationCenter.current().delegate = self
+
+        // Classic (AppDelegate) lifecycle: the plugin is registered from
+        // application(_:didFinishLaunchingWithOptions:), so this observer is
+        // added before UIKit posts the notification and fires normally.
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.didFinishLaunch),
             name: UIApplication.didFinishLaunchingNotification, object: nil)
+
+        // UIScene lifecycle: the plugin is registered from scene(_:willConnectTo:),
+        // which runs AFTER didFinishLaunchingNotification was already posted — so
+        // the observer above never fires. Use the first activation as the
+        // "launch settled" signal instead: by then a notification that launched
+        // the app has already been delivered to our delegate via didReceive, so
+        // the initial action is available. finishLaunching() is idempotent, so
+        // under the classic lifecycle the observer wins first and this is a no-op.
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.resolveLaunchOnActivation),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+
+    @objc func resolveLaunchOnActivation() {
+        // Deferred one run loop so a launch notification response delivered
+        // around activation is processed (and stored as the initial action)
+        // before we settle getInitialAction().
+        DispatchQueue.main.async { [weak self] in
+            self?.finishLaunching()
+        }
     }
     
     // ***********************  EVENT INTERFACES  *******************************
@@ -513,22 +548,26 @@ public class AwesomeNotifications:
     }
     
     // *****************************  IOS NOTIFICATION CENTER METHODS  **********************************
-    
-    private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
-    
+
     @objc public func didFinishLaunch(_ application: UIApplication) {
-        
-        UNUserNotificationCenter.current().delegate = self
-        
+        finishLaunching()
+    }
+
+    /// Marks the app launch as complete and resolves any pending
+    /// getInitialAction request. Idempotent: safe to call from both the
+    /// didFinishLaunchingNotification observer (classic lifecycle) and the
+    /// run-loop fallback (UIScene lifecycle), whichever happens first.
+    private func finishLaunching() {
+        if AwesomeNotifications.didFinishLaunch { return }
         AwesomeNotifications.didFinishLaunch = true
-        if AwesomeNotifications.completionHandlerGetInitialAction != nil {
-            AwesomeNotifications
-                .completionHandlerGetInitialAction!(
-                    ActionManager.shared.getInitialAction(
-                        removeFromEvents: AwesomeNotifications.removeFromEvents))
+
+        if let completionHandler = AwesomeNotifications.completionHandlerGetInitialAction {
+            completionHandler(
+                ActionManager.shared.getInitialAction(
+                    removeFromEvents: AwesomeNotifications.removeFromEvents))
+            AwesomeNotifications.completionHandlerGetInitialAction = nil
         }
-        
-            
+
         if AwesomeNotifications.debug {
             Logger.shared.d(TAG, "Awesome Notifications attached for iOS")
         }
@@ -554,17 +593,7 @@ public class AwesomeNotifications:
                             fromResponse: response,
                             buttonKeyPressed: buttonKeyPressed,
                             whenFinished: { (success:Bool, error:Error?) in
-                                
-                                if !success && self._originalNotificationCenterDelegate != nil {
-                                    self._originalNotificationCenterDelegate!
-                                        .userNotificationCenter?(
-                                            center,
-                                            didReceive: response,
-                                            withCompletionHandler: completionHandler)
-                                }
-                                else {
-                                    completionHandler()
-                                }
+                                completionHandler()
                             })
                     
                 default:
@@ -574,17 +603,13 @@ public class AwesomeNotifications:
                             fromResponse: response,
                             buttonKeyPressed: buttonKeyPressed,
                             whenFinished: { (success:Bool, error:Error?) in
-                                
-                                if !success && self._originalNotificationCenterDelegate != nil {
-                                    self._originalNotificationCenterDelegate!
-                                        .userNotificationCenter?(
-                                            center,
-                                            didReceive: response,
-                                            withCompletionHandler: completionHandler)
-                                }
-                                else {
-                                    completionHandler()
-                                }
+                                completionHandler()
+                                // If this is the notification that launched the
+                                // app, it is now stored as the initial action —
+                                // settle any pending getInitialAction() with it
+                                // right away (idempotent; the activation fallback
+                                // then no-ops).
+                                self.finishLaunching()
                             })
             }
         } catch {
@@ -599,16 +624,7 @@ public class AwesomeNotifications:
                         originalException: error)
             }
             
-            if self._originalNotificationCenterDelegate != nil {
-                self._originalNotificationCenterDelegate!
-                    .userNotificationCenter?(
-                        center,
-                        didReceive: response,
-                        withCompletionHandler: completionHandler)
-            }
-            else {
-                completionHandler()
-            }
+            completionHandler()
         }
     }
     
@@ -635,25 +651,16 @@ public class AwesomeNotifications:
                         withNotificationModel: notificationModel,
                         whenFinished: { (notificationDisplayed:Bool, mustPlaySound:Bool) in
                             
-                            if !notificationDisplayed && self._originalNotificationCenterDelegate != nil {
-                                self._originalNotificationCenterDelegate?
-                                    .userNotificationCenter?(
-                                        center,
-                                        willPresent: notification,
-                                        withCompletionHandler: completionHandler)
-                            }
-                            else {
-                                if notificationDisplayed {
-                                    if mustPlaySound {
-                                        completionHandler([.alert, .badge, .sound])
-                                    }
-                                    else {
-                                        completionHandler([.alert, .badge])
-                                    }
+                            if notificationDisplayed {
+                                if mustPlaySound {
+                                    completionHandler([.alert, .badge, .sound])
                                 }
                                 else {
-                                    completionHandler([])
+                                    completionHandler([.alert, .badge])
                                 }
+                            }
+                            else {
+                                completionHandler([])
                             }
                         })
             } catch {
@@ -671,16 +678,7 @@ public class AwesomeNotifications:
             
         }
         else {
-            if _originalNotificationCenterDelegate != nil {
-                _originalNotificationCenterDelegate?
-                    .userNotificationCenter?(
-                        center,
-                        willPresent: notification,
-                        withCompletionHandler: completionHandler)
-            }
-            else {
-                completionHandler([.alert, .badge, .sound])
-            }
+            completionHandler([.alert, .badge, .sound])
         }
         
         do {
