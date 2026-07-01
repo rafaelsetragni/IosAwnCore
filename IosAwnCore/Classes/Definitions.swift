@@ -207,7 +207,6 @@ public enum Definitions {
     public static let  NOTIFICATION_ENABLED = "enabled"
     public static let  NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
     public static let  NOTIFICATION_LOCKED = "locked"
-    public static let  NOTIFICATION_CRITICAL_ALERT = "criticalAlert"
     public static let  NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground"
     public static let  NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground"
     public static let  NOTIFICATION_ICON = "icon"

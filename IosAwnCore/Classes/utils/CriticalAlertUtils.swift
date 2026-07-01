@@ -53,11 +53,17 @@ public class CriticalAlertUtils {
         }
     }
 
+    /// Whether the notification's *channel* requests critical alerts.
+    ///
+    /// Critical is a **channel-level** capability, matching Android (where
+    /// DnD-bypass is a `NotificationChannel` property with no per-notification
+    /// override). A notification is critical only if its channel is critical —
+    /// there is no per-notification `criticalAlert` flag, so the rule is
+    /// identical on both platforms.
     public static func isCriticalAlertRequested(
         channel: NotificationChannelModel,
         notificationModel: NotificationModel
     ) -> Bool {
-        return (channel.criticalAlerts ?? false) ||
-            (notificationModel.content?.criticalAlert ?? false)
+        return channel.criticalAlerts ?? false
     }
 }
