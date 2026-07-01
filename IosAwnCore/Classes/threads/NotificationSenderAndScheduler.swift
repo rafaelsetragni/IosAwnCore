@@ -100,7 +100,16 @@ public class NotificationSenderAndScheduler {
             
             do {
                 if (allowed){
-                    try self.execute(completion: completion)
+                    // Resolve critical-alert availability (async, non-blocking)
+                    // before building, so the synchronous check in the builder
+                    // always sees the real value — including in an app extension.
+                    CriticalAlertUtils.ensureAvailabilityResolved {
+                        do {
+                            try self.execute(completion: completion)
+                        } catch {
+                            completion(false, nil, error)
+                        }
+                    }
                 }
                 else {
                     throw ExceptionFactory
